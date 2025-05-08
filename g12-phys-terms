@@ -1,0 +1,887 @@
+[
+  {
+    "term": "Rotational Motion",
+    "definition": "In rotational motion, the object rotates about an axis.",
+    "chapter no.": "CHAPTER 1"
+  },
+  {
+    "term": "Rigid body",
+    "definition": "A rigid body is a body that does not deform or change shape.",
+    "chapter no.": "CHAPTER 1"
+  },
+  {
+    "term": "Rotational motion under constant angular acceleration",
+    "definition": "If its angular velocity changes at a constant rate, then we can say that the angular acceleration is constant and the motion is called the rotational motion under constant angular acceleration.",
+    "chapter no.": "CHAPTER 1"
+  },
+  {
+    "term": "Rotational variables",
+    "definition": "such as angular displacement, angular velocity, and angular acceleration",
+    "chapter no.": "CHAPTER 1"
+  },
+  {
+    "term": "Nonuniform Circular Motion",
+    "definition": "In nonuniform circular motion, an object is moving in a circular path with a varying speed (magnitude of velocity).",
+    "chapter no.": "CHAPTER 1"
+  },
+   {
+    "term": "Uniform Circular Motion",
+    "definition": "In nonuniform circular motion, an object is moving in a circular path with a constant speed (magnitude of velocity).",
+    "chapter no.": "CHAPTER 1"
+  },
+  {
+    "term": "Centripetal acceleration",
+    "definition": "For uniform circular motion, the centripetal acceleration vector points towards the centre of the circular path while the linear velocity vector is tangential to the path. This acceleration is called centripetal acceleration.",
+    "chapter no.": "CHAPTER 1"
+  },
+  {
+    "term": "Centripetal Force",
+    "definition": "The force causing the centripetal acceleration, directed toward the center of the circle.",
+    "chapter no.": "CHAPTER 2"
+  },
+  {
+   "term": "Tension force (T)",
+   "definition": "The pulling force exerted by a string, cable, chain, or similar object on another object.",
+   "chapter no.": "CHAPTER 2"
+  },
+  {
+   "term": "Gravitational force (F_G)",
+   "definition": "The force of attraction between objects with mass.",
+   "chapter no.": "CHAPTER 2"
+  },
+  {
+   "term": "Electric force (F_e)",
+   "definition": "The force between electrically charged objects.",
+   "chapter no.": "CHAPTER 2"
+  },
+  {
+   "term": "Frictional force (F_f)",
+   "definition": "The force that opposes motion between surfaces in contact.",
+   "chapter no.": "CHAPTER 2"
+  },
+  {
+   "term": "Normal force (F_N)",
+   "definition": "The force exerted by a surface perpendicular to an object in contact with it.",
+   "chapter no.": "CHAPTER 2"
+  },
+  {
+   "term": "Upward thrust (Lifting Force) on a plane (F_L)",
+   "definition": "The upward force exerted by the air on the wings of an airplane, enabling it to fly.",
+   "chapter no.": "CHAPTER 2"
+  },
+  {
+    "term": "Angle of banking",
+    "definition": "The angle that the inclined track makes with horizontal is called angle of banking.",
+    "chapter no.": "CHAPTER 2"
+  },
+  {
+    "term": "Centrifuge",
+    "definition": "A centrifuge is a piece of equipment that puts an object in rotation around a fixed axis (spins it in a circle).",
+    "chapter no.": "CHAPTER 2"
+  },
+  {
+    "term": "Centrifugal Pump",
+    "definition": "Centrifugal pump is a hydraulic machine which converts mechanical energy into hydraulic energy (i.e. pressure energy) by the use of centrifugal force acting on the fluid.",
+    "chapter no.": "CHAPTER 2"
+  },
+  {
+    "term": "Centrifugal Governor",
+    "definition": "The centrifugal governor is a device used to measure and regulate the speed of a machine, such as an engine. The centrifugal governors consist of two balls of equal mass, which are attached to the arms.",
+    "chapter no.": "CHAPTER 2"
+  },
+  {
+    "term": "Centrifugal Force",
+    "definition": "Centrifugal force in a circular motion is not a real force; it acts radially away from the centre of the circle. It results from the effect of inertia.",
+    "chapter no.": "CHAPTER 2"
+  },
+  {
+    "term": "Streamlines",
+    "definition": "In the flow of fluids, the path or flow of the fluid particles is called streamlines.",
+    "chapter no.": "CHAPTER 3"
+  },
+  {
+    "term": "Laminar Flow",
+    "definition": "If fluid particles are moving steady is smooth paths in layers, with each layer moving smoothly past the adjacent layers with no mixing; such a flow is called laminar flow.",
+    "chapter no.": "CHAPTER 3"
+  },
+  {
+    "term": "Turbulent Flow",
+    "definition": "If the flow or path of the fluid particles are irregular, their direction is always changing or whirling: this fluid movement is called turbulent flow.",
+    "chapter no.": "CHAPTER 3"
+  },
+  {
+    "term": "Bernoulli's theorem",
+    "definition": "Bernoulli's theorem states that the sum of pressure energy, kinetic energy and potential energy, per unit volume of an incompressible, non-viscous fluid in a streamlined laminar flow remains constant.",
+    "chapter no.": "CHAPTER 3"
+  },
+  {
+    "term": "Viscosity",
+    "definition": "The resistance to fluid motion (or) internal resistance of fluid is called viscosity.",
+    "chapter no.": "CHAPTER 3"
+  },
+  {
+    "term": "Dynamic viscosity",
+    "definition": "One way is to measure fluid's resistance to flow when an external force is applied. This is known as dynamic viscosity.",
+    "chapter no.": "CHAPTER 3"
+  },
+  {
+    "term": "Kinematic viscosity",
+    "definition": "And the other way is to measure the resistance flow of a fluid under the weight of gravity. It is known as kinematic viscosity, which is more useful than dynamic viscosity (absolute viscosity).",
+    "chapter no.": "CHAPTER 3"
+  },
+  {
+    "term": "Newton's Law of Viscosity",
+    "definition": "Newton's law of viscosity states that the shear stress between the two adjacent layers of fluid is directly proportional to the negative value of the velocity gradient between the same two adjacent fluid layers.",
+    "chapter no.": "CHAPTER 3"
+  },
+  {
+    "term": "Stokes' law",
+    "definition": "Stokes' law states that the drag force F acting upward in resistance to the fall of a spherical object in a viscous liquid is  $F=6~\pi\eta~r~v$",
+    "chapter no.": "CHAPTER 3"
+  },
+  {
+    "term": "Surface tension",
+    "definition": "Surface tension is defined as the force per unit length that acts across any line a surface tending to pull the surface apart.",
+    "chapter no.": "CHAPTER 3"
+  },
+  {
+    "term": "Capillary Action (Capillarity)",
+    "definition": "Capillary action is defined as the spontaneous flow of a liquid into a narrow tube or porous material.",
+    "chapter no.": "CHAPTER 3"
+  },
+  {
+    "term": "Energy crisis",
+    "definition": "The energy crisis is the concern that the world's demands on the limited natural resources that are used to power industrial society are diminishing as the demand rises.",
+    "chapter no.": "CHAPTER 4"
+  },
+  {
+    "term": "Non-renewable resource",
+    "definition": "A non-renewable resource is a natural substance that is not replenished with the speed at which it is consumed.",
+    "chapter no.": "CHAPTER 4"
+  },
+  {
+    "term": "Renewable energy sources",
+    "definition": "Renewable energy sources (also called non-conventional energy sources) are continuously replenished by natural processes.",
+    "chapter no.": "CHAPTER 4"
+  },
+  {
+    "term": "Fossil Fuels",
+    "definition": "Fossil fuels, such as coal, oil and natural gas are important non-renewable sources of energy.",
+    "chapter no.": "CHAPTER 4"
+  },
+  {
+    "term": "Nuclear Energy",
+    "definition": "Nuclear energy is non-renewable as the uranium fuels used are consumed in the nuclear fission reaction and hence are non-replenishable.",
+    "chapter no.": "CHAPTER 4"
+  },
+  {
+    "term": "Irradiance",
+    "definition": "The total amount of radiation energy passing through per unit area and per unit time is called irradiance and is measured in  $W~m^{-2}$  or  $kW~m^{-2}$.",
+    "chapter no.": "CHAPTER 4"
+  },
+  {
+    "term": "Insolation",
+    "definition": "Insolation is the solar irradiance received on a horizontal surface such as ground.",
+    "chapter no.": "CHAPTER 4"
+  },
+  {
+    "term": "Solar energy",
+    "definition": "Solar energy is the radiant light and heat from the sun that has been harnessed by humans since ancient times using a range of ever-evolving technologies.",
+    "chapter no.": "CHAPTER 4"
+  },
+  {
+    "term": "Solar Technologies",
+    "definition": "There are three main ways to harness solar energy: photovoltaic solar cell, solar heating and concentrated solar power (CSP).",
+    "chapter no.": "CHAPTER 4"
+  },
+  {
+    "term": "Photovoltaic Solar Cell",
+    "definition": "A solar cell (also known as a photovoltaic cell) is defined as an electrical device that converts light energy into electrical energy through the photovoltaic effect.",
+    "chapter no.": "CHAPTER 4"
+  },
+  {
+    "term": "Concentrated Solar Power",
+    "definition": "Concentrated solar power (CSP) systems generate solar power by using mirrors or lenses to concentrate a large area of sunlight onto a specific point of receiver which converts into heat.",
+    "chapter no.": "CHAPTER 4"
+  },
+  {
+    "term": "Wind energy",
+    "definition": "Wind energy is the energy generated or produced by harnessing the power of the wind.",
+    "chapter no.": "CHAPTER 4"
+  },
+  {
+    "term": "Hydroelectric Energy",
+    "definition": "Hydroelectric energy, also called hydro electronic power or hydroelectricity is a form of energy that harnessed the power of water in motion such as water flowing over a waterfall to generate electricity.",
+    "chapter no.": "CHAPTER 4"
+  },
+  {
+    "term": "Diversion Facility (or) Run-of-river Facility",
+    "definition": "A diversion, sometimes called a run-of-river facility, channels a portion of a river through a canal or a penstock to utilize the natural decline of the river bed elevation to produce energy.",
+    "chapter no.": "CHAPTER 4"
+  },
+  {
+    "term": "Tidal Energy",
+    "definition": "The tidal energy is produced by the difference in sea levels. It is harnessed by constructing a dam (a tidal barrage) across a narrow opening to the sea.",
+    "chapter no.": "CHAPTER 4"
+  },
+  {
+    "term": "Wave Energy",
+    "definition": "The kinetic energy of huge waves near the seashore can be trapped to generate electricity. The waves are generated by strong winds blowing across the sea.",
+    "chapter no.": "CHAPTER 4"
+  },
+  {
+    "term": "Biomass",
+    "definition": "Biomass is renewable organic material that comes from plants and animals. Biomass contains stored chemical energy.",
+    "chapter no.": "CHAPTER 4"
+  },
+  {
+    "term": "Geothermal energy",
+    "definition": "Geothermal energy is a type of renewable energy taken from the Earth's core (the internal heat of the earth) and it is one of the oldest types of natural sources of heat.",
+    "chapter no.": "CHAPTER 4"
+  },
+  {
+    "term": "Acid rain",
+    "definition": "Acid rain is caused by a chemical reaction that begins when compounds like sulfur dioxide and nitrogen oxides and released into the air. These substances can rise very high into the atmosphere, where they mix and react with water, oxygen and other chemicals to form more acidic pollutants, known as acid rain.",
+    "chapter no.": "CHAPTER 4"
+  },
+  {
+    "term": "Heat",
+    "definition": "Heat is the form of energy that can be transferred from one system to another as a result of temperature difference.",
+    "chapter no.": "CHAPTER 5"
+  },
+  {
+    "term": "Heat Conduction",
+    "definition": "Heat conduction is one mode of energy transfer. The individual parts of a medium do not move as a whole in heat conduction.",
+    "chapter no.": "CHAPTER 5"
+  },
+  {
+    "term": "Temperature gradient",
+    "definition": "The ratio $\\frac{T_{2}-T_{1}}{1}$  is called temperature gradient.",
+    "chapter no.": "CHAPTER 5"
+  },
+  {
+    "term": "Heat Convection",
+    "definition": "Heat convection is the flow of heat through a fluid from places of higher temperature to places of lower temperature by movement of the fluid itself.",
+    "chapter no.": "CHAPTER 5"
+  },
+  {
+    "term": "Heat Radiation",
+    "definition": "Heat radiation is a transfer of heat that does not require a material medium. Heat is transferred by thermal radiation which are electromagnetic waves that pass through a medium or even vacuum.",
+    "chapter no.": "CHAPTER 5"
+  },
+  {
+    "term": "Black body",
+    "definition": "The object which can absorb all the electromagnetic radiations falling upon it is called a blackbody.",
+    "chapter no.": "CHAPTER 5"
+  },
+  {
+    "term": "Black body radiation",
+    "definition": "The radiation emitted by a blackbody is called blackbody radiation.",
+    "chapter no.": "CHAPTER 5"
+  },
+  {
+    "term": "Total emissive power",
+    "definition": "The total emissive power is defined as the total radiant energy of different wavelengths emitted from unit area of a surface of a body in one second.",
+    "chapter no.": "CHAPTER 5"
+  },
+  {
+    "term": "Stefan-Boltzmann's law",
+    "definition": "The total emissive power of a blackbody is directly proportional to the fourth power of absolute temperature. $\\epsilon_{0}=\\sigma~T^{4}$",
+    "chapter no.": "CHAPTER 5"
+  },
+  {
+    "term": "Emissivity",
+    "definition": "Emissivity is defined as the ratio of the total emissive power of an object to that of the blackbody, at the same temperature and wavelength. That is,  $e=\\frac{\\epsilon}{\\epsilon_{0}}$",
+    "chapter no.": "CHAPTER 5"
+  },
+  {
+    "term": "Thermodynamics",
+    "definition": "Thermodynamics is the study of systems involving energy in the form of heat and work.",
+    "chapter no.": "CHAPTER 5"
+  },
+  {
+    "term": "The Zeroth Law of Thermodynamics",
+    "definition": "When two objects are separately in thermodynamic equilibrium with a third object, they all are in thermodynamic equilibrium with each other.",
+    "chapter no.": "CHAPTER 5"
+  },
+  {
+    "term": "First Law of Thermodynamics",
+    "definition": "The change in internal energy $\\Delta U$ of a system is equal to the net heat flow Q into the system minus the total work W done by the system. In symbols, $\\Delta U=Q-W$",
+    "chapter no.": "CHAPTER 5"
+  },
+  {
+    "term": "Internal Energy",
+    "definition": "The internal energy U of a system is defined as the sum of the energies of all the constituent particles.",
+    "chapter no.": "CHAPTER 5"
+  },
+  {
+    "term": "Thermodynamics Processes",
+    "definition": "A thermodynamic process may be defined as a change from one equilibrium state of a system to another.",
+    "chapter no.": "CHAPTER 5"
+  },
+  {
+    "term": "Isobaric Process",
+    "definition": "An isobaric process occurs at constant pressure.",
+    "chapter no.": "CHAPTER 5"
+  },
+  {
+    "term": "Isochoric Process",
+    "definition": "An isochoric process occurs at constant volume.",
+    "chapter no.": "CHAPTER 5"
+  },
+  {
+    "term": "Isothermal Processes",
+    "definition": "An isothermal process occurs at constant temperature.",
+    "chapter no.": "CHAPTER 5"
+  },
+  {
+    "term": "Adiabatic Processes",
+    "definition": "An adiabatic process is one that occurs without the transfer of heat into or out of the system.",
+    "chapter no.": "CHAPTER 5"
+  },
+  {
+      "term": "Heat engine",
+      "definition": "A heat engine is a device that converts thermal energy into mechanical work.",
+      "chapter no.": "CHAPTER 5"
+   },
+   {
+      "term": "Cycle",
+      "definition": "A series of thermodynamic processes that returns a system to its initial state.",
+      "chapter no.": "CHAPTER 5"
+   },
+   {
+      "term": "Thermal efficiency",
+      "definition": "The fraction or percentage of the heat input to a heat engine that is converted into work output.",
+      "chapter no.": "CHAPTER 5"
+   },
+   {
+      "term": "Gasoline Engines",
+      "definition": "An internal combustion engine that uses spark plugs to ignite a mixture of air and gasoline, converting chemical energy into mechanical work.",
+      "chapter no.": "CHAPTER 5"
+   },
+   {
+      "term": "Diesel Engine",
+      "definition": "An internal combustion engine that uses the heat of compressed air to ignite diesel fuel, converting chemical energy into mechanical work.",
+      "chapter no.": "CHAPTER 5"
+   },
+   {
+    "term": "Carnot’s theorem",
+    "definition": "No irreversible engine operating between two given reservoirs can have a greater efficiency than a reversible engine operating between the same reservoirs.",
+    "chapter no.": "CHAPTER 5"
+  },
+  {
+    "term": "Sound",
+    "definition": "Sound is produced by vibrating objects. For example, the sound produced by a tuning fork is due to the vibration of its prongs.",
+    "chapter no.": "CHAPTER 6"
+  },
+  {
+    "term": "Speed of Sound",
+    "definition": "The distance travelled by sound per unit time is called speed of sound.",
+    "chapter no.": "CHAPTER 6"
+  },
+  {
+    "term": "Intensity Level of Sound",
+    "definition": "The level of intensity of a sound is measured relative to a reference intensity value I0, taken as 10 -12 W m-2 which correspond to the minimum intensity of sound that can be heard (threshold of earing or minimum audible intensity).",
+    "chapter no.": "CHAPTER 6"
+  },
+  {
+    "term": "Decibel",
+    "definition": "The decibel (dB) is the unit used for measuring sound intensity (intensity level of sound).",
+    "chapter no.": "CHAPTER 6"
+  },
+  {
+    "term": "Echo",
+    "definition": "Echoes are produced where a sound wave is reflected from a large and hard surface. An echo is repetition of sound due to the reflection of sound.",
+    "chapter no.": "CHAPTER 6"
+  },
+  {
+    "term": "Echolocation",
+    "definition": "Echolocation is the special ability of emitting sounds and interpreting the echoes.",
+    "chapter no.": "CHAPTER 6"
+  },
+  {
+    "term": "Reverberation",
+    "definition": "A reverberation is a reflection of light or sound waves, or a wide reaching impact of an event or idea.",
+    "chapter no.": "CHAPTER 6"
+  },
+  {
+    "term": "Audibility",
+    "definition": "Audibility is the ability to be heard.",
+    "chapter no.": "CHAPTER 6"
+  },
+  {
+    "term": "Infrasound",
+    "definition": "Infrasound is sound waves with frequencies below the lower limit of human audibility.",
+    "chapter no.": "CHAPTER 6"
+  },
+  {
+    "term": "Ultrasound",
+    "definition": "Ultrasound is sound waves with frequencies above the upper limit of human audibility.",
+    "chapter no.": "CHAPTER 6"
+  },
+  {
+      "term": "Ultrasonic Cleaning",
+      "definition": "Ultrasonic cleaning is a process that uses ultrasound to agitate a fluid, which is then used to clean a variety of objects.",
+      "chapter no.": "CHAPTER 6"
+   },
+   {
+      "term": "Sonar",
+      "definition": "Sonar (originally an acronym for Sound Navigation And Ranging) is a technique that uses sound propagation (usually underwater) to navigate, communicate with or detect other vessels.",
+      "chapter no.": "CHAPTER 6"
+   },
+  {
+    "term": "Doppler effect or Doppler shift",
+    "definition": "The Doppler effect (or the Doppler shift) is the change in sound frequency detected by an observer due to the relative motion of the sound source and the observer.",
+    "chapter no.": "CHAPTER 6"
+  },
+  {
+    "term": "Doppler Equation",
+    "definition": "$\\frac{f^{'}}{f} = \\frac{v \\pm v_{0}}{v \\mp v_{s}}$",
+    "chapter no.": "CHAPTER 6"
+  },
+  {
+    "term": "Red Shift",
+    "definition": "When the source moves away from the observer, the observed frequency decreases. This phenomenon is called redshift because the visible light is shifted toward the red end of the spectrum.",
+    "chapter no.": "CHAPTER 6"
+  },
+  {
+    "term": "Radar",
+    "definition": "Radar is an object-detection system that uses radio waves to determine the range, angle, or velocity of objects.",
+    "chapter no.": "CHAPTER 6"
+  },
+  {
+    "term": "Intensity of sound",
+    "definition": "Intensity of a sound wave is defined as the average rate at which energy is transmitted per unit area perpendicular to the direction of propagation of the wave.",
+    "chapter no.": "CHAPTER 6"
+  },
+  {
+      "term": "Loudness",
+      "definition": "Loudness is the subjective perception of sound pressure. More technically, it is defined as the attribute of auditory sensation in terms of which sounds can be ordered on a scale extending from quiet to loud.",
+      "chapter no.": "CHAPTER 6"
+   },
+   {
+      "term": "Timbre",
+      "definition": "Timbre is the perceived sound quality of a musical note, sound or tone.",
+      "chapter no.": "CHAPTER 6"
+   },
+  {
+    "term": "Camera",
+    "definition": "A camera is an optical instrument used to record images. A camera works much like the human eye.",
+    "chapter no.": "CHAPTER 7"
+  },
+  {
+    "term": "Human eye",
+    "definition": "The human eye is a complex optical system that enables us to see the world around us.",
+    "chapter no.": "CHAPTER 7"
+  },
+  {
+    "term": "Eyelid",
+    "definition": "The eyelid is a thin fold of skin that covers and protects the eye.",
+    "chapter no.": "CHAPTER 7"
+  },
+  {
+    "term": "Cornea",
+    "definition": "The cornea is the transparent front part of the eye that allows light to enter.",
+    "chapter no.": "CHAPTER 7"
+  },
+  {
+    "term": "Aqueous humour and vitreous humour",
+    "definition": "Aqueous humour is a clear, watery fluid found in the anterior chamber between the cornea and the lens, while vitreous humour is a thick, jelly-like substance that fills the posterior chamber between the lens and the retina.",
+    "chapter no.": "CHAPTER 7"
+  },
+  {
+    "term": "Iris",
+    "definition": "The iris is a colored, circular part of the eye behind the cornea and in front of the lens.",
+    "chapter no.": "CHAPTER 7"
+  },
+  {
+    "term": "Pupil",
+    "definition": "The pupil is a black circular opening in the center of the iris that allows light to enter the eye.",
+    "chapter no.": "CHAPTER 7"
+  },
+  {
+    "term": "Ciliary muscles",
+    "definition": "The ciliary muscles are a ring of smooth muscle fibers that change the shape of the lens to focus light on the retina.",
+    "chapter no.": "CHAPTER 7"
+  },
+  {
+    "term": "Retina",
+    "definition": "The retina is a light-sensitive layer of tissue at the back of the eye that converts light into electrical signals, which are sent to the brain.",
+    "chapter no.": "CHAPTER 7"
+  },
+  {
+    "term": "Farsightedness (hyperopia)",
+    "definition": "For a person with farsightedness, also known as hyperopia, the rays from a nearby object intersect at apoint behind the retina after passing through the eyelens which cannot be sufficiently convex. This defect can be corrected by the use of spectacles with converging lens or convex lens.",
+    "chapter no.": "CHAPTER 7"
+  },
+  {
+    "term": "Nearsightedness (myopia)",
+    "definition": "For a person with nearsightedness, the rays from distant objects intersect at a point in front of the retina after passing through the eyelens. This is due to an eyeball which is too long...",
+    "chapter no.": "CHAPTER 7"
+  },
+  {
+    "term": "Microscope",
+    "definition": "A microscope is an optical instrument that uses lenses to produce magnified images of small objects.",
+    "chapter no.": "CHAPTER 7"
+  },
+  {
+    "term": "Electron Microscope",
+    "definition": "An electron microscope is a type of microscope that uses a beam of accelerated electrons as a source of illumination.",
+    "chapter no.": "CHAPTER 7"
+  },
+  {
+    "term": "Telescope",
+    "definition": "A telescope is an optical instrument that uses lenses or mirrors to view distant objects.",
+    "chapter no.": "CHAPTER 7"
+  },
+  {
+    "term": "Astronomical Telescope",
+    "definition": "Astronomical telescopes are used to observe celestial objects such as planets, stars, and galaxies.",
+    "chapter no.": "CHAPTER 7"
+  },
+  {
+    "term": "Binoculars",
+    "definition": "Binoculars are a pair of telescopes mounted side-by-side, allowing the viewer to use both eyes.",
+    "chapter no.": "CHAPTER 7"
+  },
+  {
+    "term": "Optics",
+    "definition": "Optics is the branch of physics that studies the behavior and properties of light, including its interactions with matter and the construction of instruments that use or detect it.",
+    "chapter no.": "CHAPTER 7"
+  },
+  {
+    "term": "HUYGENS' PRINCIPLE",
+    "definition": "Huygens' Principle states that every point on a wavefront is itself the source of secondary spherical wavelets. The new wavefront is the envelope of these secondary wavelets.",
+    "chapter no.": "CHAPTER 8"
+  },
+  {
+    "term": "Wavefront",
+    "definition": "A wavefront is a surface joining points in a medium where the particles are in phase.",
+    "chapter no.": "CHAPTER 8"
+  },
+  {
+    "term": "Phase (Phase Angle)",
+    "definition": "Phase (or phase angle) is the fraction of the cycle through which the vibration has progressed, measured from some arbitrary origin.",
+    "chapter no.": "CHAPTER 8"
+  },
+  {
+    "term": "INTERFERENCE OF LIGHT",
+    "definition": "Interference is a phenomenon in which two or more waves overlap to produce a resultant wave with a new amplitude.",
+    "chapter no.": "CHAPTER 8"
+  },
+  {
+    "term": "Fringe width",
+    "definition": "The distance between two consecutive bright or dark fringes is called the fringe width.",
+    "chapter no.": "CHAPTER 8"
+  },
+  {
+    "term": "Fresnel diffraction",
+    "definition": "The source of light and the screen are at a finite distance from the obstacle causing the diffraction.",
+    "chapter no.": "CHAPTER 8"
+  },
+  {
+    "term": "Fraunhofer diffraction",
+    "definition": "There is an infinite distance between the source and the screen from the obstacle. In this section Fraunhofer diffraction will be discussed.",
+    "chapter no.": "CHAPTER 8"
+  },
+  {
+    "term": "Coherent sources",
+    "definition": "If the waves emitted from two sources have the same frequency and constant phase difference, the sources are coherent sources.",
+    "chapter no.": "CHAPTER 8"
+  },
+  {
+    "term": "Monochromatic light",
+    "definition": "Monochromatic light is a light source that emits a single wavelength or frequency of light.",
+    "chapter no.": "CHAPTER 8"
+  },
+  {
+    "term": "Diffraction of light",
+    "definition": "Diffraction is the bending of light waves around obstacles or through narrow openings.",
+    "chapter no.": "CHAPTER 8"
+  },
+  {
+    "term": "Diffraction grating",
+    "definition": "A diffraction grating is an optical component with a periodic structure that splits light into several beams travelling in different directions.",
+    "chapter no.": "CHAPTER 8"
+  },
+  {
+    "term": "Capacitor",
+    "definition": "A capacitor is a passive electronic component that stores electrical energy in an electric field.",
+    "chapter no.": "CHAPTER 9"
+  },
+  {
+    "term": "Charge of capacitor",
+    "definition": "Charge of capacitor is the amount of electrical charge stored on the plates of a capacitor.",
+    "chapter no.": "CHAPTER 9"
+  },
+  {
+    "term": "Potential difference of the capacitor",
+    "definition": "Potential difference across a capacitor is the voltage between the two plates of the capacitor.",
+    "chapter no.": "CHAPTER 9"
+  },
+  {
+    "term": "Capacitance",
+    "definition": "Capacitance is the ability of a capacitor to store electrical charge.",
+    "chapter no.": "CHAPTER 9"
+  },
+  {
+    "term": "One Farad",
+    "definition": "One farad is the capacitance of a capacitor that stores one coulomb of charge when a potential difference of one volt is applied between its plates.",
+    "chapter no.": "CHAPTER 9"
+  },
+  {
+    "term": "Parallel plate capacitor",
+    "definition": "A parallel plate capacitor consists of two conductive plates separated by a dielectric material.",
+    "chapter no.": "CHAPTER 9"
+  },
+  {
+    "term": "Dielectric constant",
+    "definition": "The dielectric constant is a measure of how much a material can increase the capacitance of a capacitor compared to vacuum.",
+    "chapter no.": "CHAPTER 9"
+  },
+  {
+    "term": "Semiconductor Diode",
+    "definition": "A semiconductor diode is a two-terminal electronic component that conducts current primarily in one direction.",
+    "chapter no.": "CHAPTER 10"
+  },
+  {
+    "term": "Depletion layer",
+    "definition": "The depletion layer is a region in a semiconductor diode where no mobile charge carriers are present.",
+    "chapter no.": "CHAPTER 10"
+  },
+  {
+    "term": "Potential barrier",
+    "definition": "The potential barrier is the energy barrier that charge carriers must overcome to flow through a semiconductor diode.",
+    "chapter no.": "CHAPTER 10"
+  },
+  {
+    "term": "Forward biased",
+    "definition": "A diode is forward biased when the p-side is connected to the positive terminal of a voltage source and the n-side to the negative terminal, allowing current to flow.",
+    "chapter no.": "CHAPTER 10"
+  },
+  {
+    "term": "Reverse biased",
+    "definition": "A diode is reverse biased when the p-side is connected to the negative terminal of a voltage source and the n-side to the positive terminal, resulting in very little current flow.",
+    "chapter no.": "CHAPTER 10"
+  },
+  {
+    "term": "Rectification",
+    "definition": "Rectification is the process of converting alternating current (AC) into direct current (DC).",
+    "chapter no.": "CHAPTER 10"
+  },
+  {
+    "term": "Half-wave rectifier",
+    "definition": "A half-wave rectifier is a circuit that allows only one half-cycle of an AC voltage to pass, converting it into pulsating DC.",
+    "chapter no.": "CHAPTER 10"
+  },
+  {
+    "term": "Full-wave rectifier",
+    "definition": "A full-wave rectifier is a circuit that converts both half-cycles of an AC voltage into pulsating DC.",
+    "chapter no.": "CHAPTER 10"
+  },
+  {
+    "term": "Bridge rectifier",
+    "definition": "A bridge rectifier is a type of full-wave rectifier that uses four diodes in a bridge configuration to convert AC into pulsating DC.",
+    "chapter no.": "CHAPTER 10"
+  },
+  {
+    "term": "Smoothing",
+    "definition": "Smoothing is the process of reducing the ripple voltage in a rectified DC output using a filter circuit.",
+    "chapter no.": "CHAPTER 10"
+  },
+  {
+    "term": "Zener Diode",
+    "definition": "A Zener diode is a special type of diode that allows current to flow in the reverse direction when the voltage reaches a specific breakdown voltage.",
+    "chapter no.": "CHAPTER 10"
+  },
+  {
+    "term": "Voltage regulator",
+    "definition": "A voltage regulator is a circuit that maintains a constant output voltage despite changes in input voltage or load current.",
+    "chapter no.": "CHAPTER 10"
+  },
+  {
+    "term": "Light Emitting Diode (LED)",
+    "definition": "A LED is a semiconductor light source that emits light when current flows through it.",
+    "chapter no.": "CHAPTER 10"
+  },
+  {
+    "term": "Photodiode",
+    "definition": "A photodiode is a semiconductor device that converts light into an electrical current.",
+    "chapter no.": "CHAPTER 10"
+  },
+  {
+    "term": "Transistor",
+    "definition": "A transistor is a semiconductor device that can amplify or switch electronic signals and electrical power.",
+    "chapter no.": "CHAPTER 10"
+  },
+  {
+    "term": "Bipolar Junction Transistor (BJT)",
+    "definition": "A bipolar junction transistor (BJT) is a three-terminal semiconductor device that uses both electrons and holes as charge carriers.",
+    "chapter no.": "CHAPTER 10"
+  },
+  {
+    "term": "Field Effect Transistor (FET)",
+    "definition": "A field-effect transistor (FET) is a three-terminal semiconductor device that controls current flow by varying the width of a channel through which charge carriers flow.",
+    "chapter no.": "CHAPTER 10"
+  },
+  {
+    "term": "MOSFET",
+    "definition": "A MOSFET (Metal-Oxide-Semiconductor Field-Effect Transistor) is a type of FET that is widely used in integrated circuits.",
+    "chapter no.": "CHAPTER 10"
+  },
+  {
+    "term": "Avalanche breakdown",
+    "definition": "Avalanche breakdown occurs at junctions which being lightly doped have wide depletion layers.",
+    "chapter no.": "CHAPTER 10"
+  },
+  {
+    "term": "Zener breakdown",
+    "definition": "Zener breakdown occurs at junctions which being heavily doped have narrow depletion layers.",
+    "chapter no.": "CHAPTER 10"
+  },
+  {
+    "term": "NTC thermistor",
+    "definition": "The NTC's resistance decreases as the temperature increases, and vice versa.",
+    "chapter no.": "CHAPTER 10"
+  },
+  {
+    "term": "PTC thermistor",
+    "definition": "In the Positive Temperature Coefficient (PTC) thermistor, the resistance increases as the temperature increases, and is used to break the circuit at preset temperatures.",
+    "chapter no.": "CHAPTER 10"
+  },
+  {
+    "term": "Liquid crystals",
+    "definition": "Liquid crystals are a state of matter which has properties between those of conventional liquids and those of solid crystals.",
+    "chapter no.": "CHAPTER 10"
+  },
+  {
+    "term": "Liquid crystal display (LCD)",
+    "definition": "A liquid crystal display (LCD) is a flat-panel display or other electronically modulated optical device that uses the light-modulating properties of liquid crystals combined with polarizers.",
+    "chapter no.": "CHAPTER 10"
+  },
+  {
+    "term": "Polarizer",
+    "definition": "A polarizer is an optical device that can convert an unpolarized light wave into a polarize light wave by blocking all other vibrations.",
+    "chapter no.": "CHAPTER 10"
+  },
+  {
+    "term": "Digital electronics",
+    "definition": "Digital electronics is a field of electronics involving the study of digital signals and the engineering of devices that use or produce them.",
+    "chapter no.": "CHAPTER 10"
+  },
+  {
+    "term": "Boolean algebra",
+    "definition": "Boolean algebra is a branch of algebra in which the values of the variables are the truth values true and false, usually denoted 1 and 0, respectively.",
+    "chapter no.": "CHAPTER 10"
+  },
+  {
+    "term": "De Morgan's Theorem",
+    "definition": "De Morgan's Theorem is a pair of transformation rules that are both valid rules of inference.",
+    "chapter no.": "CHAPTER 10"
+  },
+  {
+    "term": "electronic communication system",
+    "definition": "An electronic communication system is a system that transmits information using electronic signals.",
+    "chapter no.": "12.3 BASIC ELECTRONIC COMMUNICATION"
+  },
+  {
+    "term": "Nuclear Physics",
+    "definition": "Nuclear physics is the field of physics that studies the constituents, structure, behaviour and interactions of atomic nuclei.",
+    "chapter no.": "CHAPTER 13"
+  },
+  {
+    "term": "Mass defect",
+    "definition": "The mass defect is the difference between the mass of a nucleus and the sum of the masses of the nucleons it contains.",
+    "chapter no.": "CHAPTER 13"
+  },
+  {
+    "term": "Binding energy",
+    "definition": "Nuclear binding energy is the energy required to separate an atomic nucleus completely into its constituent protons and neutrons.",
+    "chapter no.": "CHAPTER 13"
+  },
+  {
+    "term": "Nuclear fission",
+    "definition": "Nuclear fission is the process in which the nucleus of an atom splits into two or more smaller nuclei.",
+    "chapter no.": "CHAPTER 13"
+  },
+  {
+    "term": "Chain reaction",
+    "definition": "A chain reaction is a self-sustaining series of reactions in which the product of one reaction initiates the next reaction.",
+    "chapter no.": "CHAPTER 13"
+  },
+  {
+    "term": "Nuclear fusion",
+    "definition": "Nuclear fusion is the process in which two or more atomic nuclei combine to form a single, heavier nucleus.",
+    "chapter no.": "CHAPTER 13"
+  },
+  {
+    "term": "Nuclear Reactor",
+    "definition": "A nuclear reactor is a device in which nuclear chain reactions are initiated, controlled, and sustained for the purpose of generating electricity or producing isotopes.",
+    "chapter no.": "CHAPTER 13"
+  },
+  {
+    "term": "Moderator",
+    "definition": "Moderator is a material to slow down fast neutrons released from a fission process. Graphite and ordinary water (H2O) as well as heavy water (D2O) are used as moderators.",
+    "chapter no.": "CHAPTER 13"
+  },
+  {
+    "term": "Coolant",
+    "definition": "Coolant is to extract the heat produced by fission fragments when they slow down and stop in the reactor material. Water and carbon dioxide CO2 gas are used as coolant.",
+    "chapter no.": "CHAPTER 13"
+  },
+  {
+    "term": "Control rods",
+    "definition": "Control rods are used to control the rate of reaction by raising or lowering them from the core. Boron and cadmium (neutron absorbing materials) are used as control rods.",
+    "chapter no.": "CHAPTER 13"
+  },
+  {
+    "term": "Reactor vessel",
+    "definition": "Reactor vessel is to contain the reactor core, moderator, coolant and control rods. It is a pressurized steel vessel.",
+    "chapter no.": "CHAPTER 13"
+  },
+  {
+    "term": "Shielding (or containment structure)",
+    "definition": "Shielding (or containment structure) is a protective barrier, usually a dense material. It reduces the passage of radiations from radioactive materials by absorbing them.",
+    "chapter no.": "CHAPTER 13"
+  },
+  {
+    "term": "Radioactive waste",
+    "definition": "Materials which are radioactive and for which there is no further use are called radioactive waste.",
+    "chapter no.": "CHAPTER 13"
+  },
+  {
+    "term": "Atomic bomb",
+    "definition": "In an atomic bomb, an uncontrolled chain reaction takes place so that an extremely large amount of energy is released in a short interval of time.",
+    "chapter no.": "CHAPTER 13"
+  },
+  {
+    "term": "de Broglie wavelength",
+    "definition": "The wavelength  associated with a moving particle (matter wave) is also called de Broglie wavelength.",
+    "chapter no.": "CHAPTER 13"
+  },
+  {
+    "term": "frame of reference",
+    "definition": "Motion is always measured with respect to a reference point (or place), which is called a frame of reference.",
+    "chapter no.": "CHAPTER 13"
+  },
+  {
+    "term": "Relativity of simultaneity",
+    "definition": "The order of events depends on the motion of the observer.",
+    "chapter no.": "CHAPTER 13"
+  },
+  {
+    "term": "Time dilation",
+    "definition": "Time dilation is the phenomenon of time passing more slowly for an observer who is moving relative to another observer.",
+    "chapter no.": "CHAPTER 13"
+  },
+  {
+    "term": "Length contraction",
+    "definition": "The length of an object measured in a frame in which the object is moving is shorter than the length measured in a frame in which the object is at rest.",
+    "chapter no.": "CHAPTER 13"
+  },
+  {
+    "term": "Inertial frame",
+    "definition": "An inertial frame is a frame of reference that has no acceleration (where all objects follow Newton 's first law of motion).",
+    "chapter no.": "CHAPTER 13"
+  }
+]
