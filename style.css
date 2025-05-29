@@ -1,0 +1,528 @@
+/* Apply Inter font to the entire body */
+body {
+    font-family: 'Inter', sans-serif;
+}
+/* Custom styling for toggle switches */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 48px; /* Slightly wider */
+    height: 28px; /* Slightly taller */
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #4A5568; /* Darker gray for off state */
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 28px; /* Fully rounded */
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px; /* Adjusted size */
+    width: 20px; /* Adjusted size */
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 50%; /* Make it round */
+}
+
+input:checked + .slider {
+    background-color: #6366F1; /* Indigo-600 for on state */
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #6366F1;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(20px); /* Adjusted for new width */
+    -ms-transform: translateX(20px); /* Adjusted for new width */
+    transform: translateX(20px); /* Adjusted for new width */
+}
+
+/* Ensure textarea is scrollable */
+textarea {
+    overflow-y: auto;
+    resize: vertical; /* Allow vertical resizing */
+}
+/* Custom message box styling (Toast) */
+.message-container {
+    position: fixed;
+    bottom: 20px; /* Closer to bottom */
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    padding: 0 1rem;
+}
+
+.message-box {
+    background-color: #333;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    max-width: 500px;
+    width: auto;
+    font-size: 0.9rem; /* Slightly smaller font */
+}
+
+.message-box.show {
+    opacity: 1;
+}
+
+.message-box.success {
+    background-color: #10B981; /* Emerald-500 */
+}
+
+.message-box.error {
+    background-color: #EF4444; /* Red-500 */
+}
+
+.message-box.info {
+    background-color: #3B82F6; /* Blue-500 */
+}
+
+/* Loading Overlay */
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(31, 41, 55, 0.8); /* Darker semi-transparent */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.75rem; /* rounded-xl */
+    z-index: 10;
+    transition: opacity 0.3s ease-in-out;
+    opacity: 0;
+    visibility: hidden;
+}
+.loading-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Spinner */
+.loading-spinner {
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid #6366F1; /* Indigo-600 */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Full-screen Modal for Reading Article */
+.fullscreen-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85); /* Slightly darker overlay */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.fullscreen-modal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content-wrapper {
+    background-color: #1F2937; /* Darker background for modal */
+    overflow-y: hidden;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); /* Stronger shadow */
+    color: #E5E7EB; /* Light gray text */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border-radius: 0; /* No border-radius on full screen */
+}
+
+@media (min-width: 640px) {
+    .modal-content-wrapper {
+        width: 90%;
+        height: 90%;
+        border-radius: 0.75rem; /* rounded-xl on desktop */
+    }
+}
+
+.modal-close-btn {
+    background-color: rgba(255, 255, 255, 0.1); /* Subtle background */
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #E5E7EB; /* Light text */
+    border-radius: 9999px;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.2s, color 0.2s, transform 0.2s;
+}
+
+.modal-close-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #FFFFFF;
+    transform: scale(1.05);
+}
+
+.modal-article-content-scroll {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 0;
+}
+
+.modal-article-title {
+    font-size: 1.75rem; /* Larger title in modal */
+    font-weight: 700; /* Bold */
+    color: #F9FAFB; /* White text */
+    margin-bottom: 0.75rem;
+    padding: 1rem 1.5rem 0; /* Top padding, horizontal padding */
+}
+
+.modal-article-text {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 1.125rem; /* Slightly smaller base text */
+    line-height: 1.7; /* Increased line height for readability */
+    padding: 0 1.5rem; /* Horizontal padding */
+    padding-bottom: 10rem;
+    color: #D1D5DB; /* Lighter gray text */
+}
+
+.modal-article-text h1, .modal-article-text h2, .modal-article-text h3,
+.modal-article-text h4, .modal-article-text h5, .modal-article-text h6 {
+    font-weight: 700;
+    margin-top: 2rem; /* More space above headings */
+    margin-bottom: 0.75rem;
+    padding: 0 1.5rem; /* Match parent padding */
+    color: #F9FAFB; /* White text */
+}
+.modal-article-text h1 { font-size: 2.5rem; }
+.modal-article-text h2 { font-size: 2.25rem; }
+.modal-article-text h3 { font-size: 2rem; }
+.modal-article-text h4 { font-size: 1.75rem; }
+.modal-article-text h5 { font-size: 1.5rem; }
+.modal-article-text h6 { font-size: 1.25rem; }
+
+.modal-article-text ul, .modal-article-text ol {
+    padding-left: 2.5rem; /* More indent for lists */
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+    padding-right: 1.5rem;
+}
+.modal-article-text li {
+    margin-bottom: 0.5rem; /* More space between list items */
+}
+
+@media (min-width: 640px) {
+    .modal-article-title {
+        padding: 1.5rem 2.5rem 1rem; /* Increased padding for desktop */
+    }
+    .modal-article-text {
+        padding: 0 2.5rem;
+    }
+    .modal-article-text h1, .modal-article-text h2, .modal-article-text h3,
+    .modal-article-text h4, .modal-article-text h5, .modal-article-text h6,
+    .modal-article-text ul, .modal-article-text ol {
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+    }
+}
+
+.font-size-controls {
+    display: flex;
+    gap: 0.75rem; /* Increased gap */
+    padding: 0.75rem 1.5rem; /* More padding */
+    align-items: center;
+    justify-content: space-between;
+    background-color: #2D3748; /* Darker background */
+    border-bottom: 1px solid #4A5568; /* Darker border */
+}
+
+.font-size-group {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.font-size-button {
+    background-color: #4A5568; /* Dark gray */
+    color: #E5E7EB; /* Light gray */
+    border: none;
+    border-radius: 0.375rem; /* Slightly more rounded */
+    padding: 0.5rem 0.75rem;
+    font-size: 1.125rem; /* Larger font for buttons */
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.font-size-button:hover {
+    background-color: #6366F1; /* Indigo on hover */
+    color: #FFFFFF;
+}
+
+.button-spinner {
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid #fff;
+    border-radius: 50%;
+    width: 1em;
+    height: 1em;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 0.5em;
+}
+
+/* Word Meaning Pop-up */
+.word-meaning-popup {
+    position: absolute;
+    background-color: #374151; /* Darker gray */
+    color: #F9FAFB; /* Light text */
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    z-index: 2001;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+    transform: translateY(10px);
+    max-width: 320px; /* Slightly wider */
+    text-align: left;
+    font-size: 0.95rem; /* Slightly larger font */
+    border: 1px solid #4B5563; /* Subtle border */
+}
+
+.word-meaning-popup.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Styles for visual grouping of toggles */
+.toggle-group-container {
+    border: 1px solid #4B5563; /* Darker border */
+    border-radius: 0.75rem; /* More rounded */
+    padding: 1.5rem; /* More padding */
+    background-color: #2D3748; /* Darker background */
+    margin-top: 1.5rem; /* More space */
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.1); /* Stronger inner shadow */
+}
+
+/* Saved Notes Modal styles */
+.saved-notes-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.saved-notes-modal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.saved-notes-content {
+    background-color: #1F2937; /* Darker background */
+    color: #E5E7EB; /* Light text */
+    padding: 2rem; /* More padding */
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    max-width: 90%;
+    max-height: 90%;
+    overflow-y: auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #4B5563; /* Subtle border */
+}
+
+.saved-notes-content h2 {
+    font-size: 2rem; /* Larger heading */
+    font-weight: 700;
+    margin-bottom: 1.5rem; /* More space */
+    color: #9CA3AF; /* Lighter gray for headings */
+}
+
+.saved-notes-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+    overflow-y: auto;
+    padding-right: 0.75rem; /* For scrollbar */
+}
+
+.saved-notes-list li {
+    background-color: #2D3748; /* Slightly lighter dark */
+    margin-bottom: 1rem; /* More space between items */
+    padding: 1.25rem; /* More padding */
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column; /* Stack title and date */
+    align-items: flex-start; /* Align text to start */
+    border: 1px solid #4B5563; /* Subtle border */
+    transition: background-color 0.2s ease-in-out;
+}
+.saved-notes-list li:hover {
+    background-color: #374151; /* Darker on hover */
+}
+
+.saved-notes-list li span:first-child { /* Title */
+    font-weight: 600;
+    font-size: 1.125rem;
+    color: #F9FAFB;
+    margin-bottom: 0.25rem;
+}
+
+.saved-notes-list li span.text-xs { /* Date */
+    font-size: 0.875rem; /* Slightly larger date font */
+    color: #9CA3AF;
+}
+
+.saved-notes-list li div { /* Buttons container */
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.75rem; /* Space from text */
+}
+
+.saved-notes-list li button {
+    background-color: #6366F1; /* Indigo */
+    color: white;
+    padding: 0.6rem 1rem; /* More padding */
+    border-radius: 0.375rem;
+    transition: background-color 0.2s;
+    font-size: 0.95rem; /* Slightly larger font */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.saved-notes-list li button:hover {
+    background-color: #4F46E5;
+}
+
+.saved-notes-list li .delete-btn {
+    background-color: #EF4444; /* Red */
+}
+
+.saved-notes-list li .delete-btn:hover {
+    background-color: #DC2626;
+}
+
+.modal-close-btn-top-right { /* Specific for saved notes list modal */
+    position: absolute;
+    top: 1.5rem; /* More space from top */
+    right: 1.5rem; /* More space from right */
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    font-size: 1.75rem; /* Larger icon */
+    cursor: pointer;
+    color: #E5E7EB;
+    border-radius: 9999px;
+    width: 2.75rem; /* Larger circle */
+    height: 2.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.2s, color 0.2s, transform 0.2s;
+}
+
+.modal-close-btn-top-right:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #FFFFFF;
+    transform: scale(1.05);
+}
+
+/* Main action buttons (Generate, Surprise) */
+.main-action-button {
+    padding: 0.75rem 1.25rem; /* Increased padding */
+    font-size: 1rem; /* Base font size */
+    width: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem; /* Increased gap between icon and text/spinner */
+    border-radius: 0.5rem; /* More rounded */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2); /* Subtle shadow */
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+.main-action-button:hover {
+    transform: translateY(-2px); /* Slight lift on hover */
+}
+.main-action-button svg {
+    width: 1.5em; /* Larger icons */
+    height: 1.5em;
+}
+
+/* Article action buttons (Copy, Save, Regenerate, Read) */
+.article-action-button {
+    padding: 0.75rem; /* More padding for a squarer button */
+    font-size: 1rem; /* Base font size */
+    flex-grow: 1;
+    min-width: 4.5rem; /* Adjusted min-width for larger icons */
+    max-width: 9rem; /* Adjusted max-width */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem; /* Gap for potential text + icon, or just icon centering */
+    border-radius: 0.5rem; /* More rounded */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2); /* Subtle shadow */
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+.article-action-button:hover {
+    transform: translateY(-2px); /* Slight lift on hover */
+}
+.article-action-button svg {
+    width: 1.5em; /* Larger icons */
+    height: 1.5em;
+}
