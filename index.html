@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics Web</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Basic Reset & Font */
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to bottom right, #1a202c, #2b3a5b); /* from-gray-900 to-blue-900 */
+            color: #e2e8f0; /* text-white */
+            min-height: 100vh;
+            padding: 1rem; /* p-4 */
+            box-sizing: border-box;
+        }
+
+        @media (min-width: 640px) { /* sm:p-8 */
+            body {
+                padding: 2rem;
+            }
+        }
+
+        /* Header Styling */
+        header {
+            text-align: center;
+            margin-bottom: 2rem; /* mb-8 */
+        }
+
+        h1 {
+            font-size: 2.25rem; /* text-4xl */
+            font-weight: 800; /* font-extrabold */
+            margin-bottom: 0.5rem; /* mb-2 */
+            background-image: linear-gradient(to right, #60a5fa, #a78bfa); /* from-blue-400 to-purple-600 */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent; /* Fallback for browsers not supporting text-fill-color */
+        }
+
+        @media (min-width: 640px) { /* sm:text-5xl */
+            h1 {
+                font-size: 3rem;
+            }
+        }
+
+        header p {
+            font-size: 1.125rem; /* text-lg */
+            color: #cbd5e0; /* text-gray-300 */
+        }
+
+        @media (min-width: 640px) { /* sm:text-xl */
+            header p {
+                font-size: 1.25rem;
+            }
+        }
+
+        /* Search Bar */
+        .search-container {
+            margin-bottom: 2rem; /* mb-8 */
+            display: flex;
+            justify-content: center;
+        }
+
+        #search-input {
+            padding: 0.75rem; /* p-3 */
+            border-radius: 0.5rem; /* rounded-lg */
+            width: 100%;
+            max-width: 32rem; /* max-w-md */
+            background-color: #2d3748; /* bg-gray-800 */
+            border: 1px solid #4a5568; /* border border-gray-700 */
+            color: #e2e8f0; /* text-white */
+            outline: none;
+            transition: all 0.3s ease; /* transition-all duration-300 */
+        }
+
+        #search-input::placeholder {
+            color: #a0aec0; /* placeholder-gray-400 */
+        }
+
+        #search-input:focus {
+            border-color: #3b82f6; /* focus:ring-blue-500 */
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); /* focus:ring-2 focus:ring-blue-500 */
+        }
+
+        /* Accordion Layout */
+        .accordion-container {
+            max-width: 60rem; /* Adjusted for better readability */
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem; /* gap-3 between accordion items */
+        }
+
+        .accordion-item {
+            background-color: #2d3748; /* bg-gray-800 */
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* shadow-lg */
+            border: 1px solid #4a5568; /* border border-gray-700 */
+            overflow: hidden; /* Ensures rounded corners work with content */
+            transition: border-color 0.3s ease;
+        }
+
+        .accordion-item.expanded {
+            border-color: #3b82f6; /* hover:border-blue-500 */
+        }
+
+        .accordion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem; /* py-4 px-6 */
+            cursor: pointer;
+            background-color: #2d3748; /* bg-gray-800 */
+            border-bottom: 1px solid #4a5568; /* subtle separator */
+            transition: background-color 0.3s ease;
+        }
+
+        .accordion-item.expanded .accordion-header {
+            border-bottom: none; /* No separator when expanded */
+        }
+
+        .accordion-header:hover {
+            background-color: #374151; /* hover:bg-gray-700 */
+        }
+
+        .accordion-header h2 {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 700; /* font-bold */
+            color: #60a5fa; /* text-blue-400 */
+            margin: 0; /* Override default margin */
+        }
+
+        .accordion-icon {
+            font-size: 1.5rem;
+            color: #9ca3af; /* text-gray-400 */
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-item.expanded .accordion-icon {
+            transform: rotate(90deg); /* Rotate icon when expanded */
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out; /* Smooth transition for expand/collapse */
+            padding: 0 1.5rem; /* Initial padding */
+        }
+
+        .accordion-item.expanded .accordion-content {
+            max-height: 1000px; /* Large enough value to show all content */
+            padding-bottom: 1.5rem; /* Add padding when expanded */
+        }
+
+        .terms-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem; /* gap-3 */
+            padding-top: 1rem; /* Add some space from the header */
+        }
+
+        .term-button {
+            padding: 0.5rem 1rem; /* px-4 py-2 */
+            background-color: #1d4ed8; /* bg-blue-700 */
+            color: #e2e8f0; /* text-white */
+            border-radius: 9999px; /* rounded-full */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* shadow-md */
+            transition: all 0.3s ease; /* transition-all duration-300 */
+            transform: scale(1); /* initial transform for hover effect */
+            border: none;
+            cursor: pointer;
+            font-size: 0.875rem; /* text-sm */
+        }
+
+        @media (min-width: 640px) { /* sm:text-base */
+            .term-button {
+                font-size: 1rem;
+            }
+        }
+
+        .term-button:hover {
+            background-color: #2563eb; /* hover:bg-blue-600 */
+            transform: scale(1.05); /* hover:scale-105 */
+        }
+
+        .term-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.75); /* focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 */
+        }
+
+        .no-terms-message {
+            color: #a0aec0; /* text-gray-400 */
+            font-size: 0.875rem; /* text-sm */
+            padding-top: 1rem;
+        }
+
+        /* Modal Styling */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.75); /* bg-black bg-opacity-75 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem; /* p-4 */
+            z-index: 50;
+        }
+
+        .modal-content {
+            background-color: #2d3748; /* bg-gray-800 */
+            padding: 1.5rem; /* p-6 */
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); /* shadow-2xl */
+            max-width: 48rem; /* max-w-3xl */
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid #4a5568; /* border border-gray-700 */
+            position: relative;
+        }
+
+        .modal-close-button {
+            position: absolute;
+            top: 0.75rem; /* top-3 */
+            right: 0.75rem; /* right-3 */
+            color: #a0aec0; /* text-gray-400 */
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 700; /* font-bold */
+            cursor: pointer;
+            background: none;
+            border: none;
+            outline: none;
+        }
+
+        .modal-close-button:hover {
+            color: #e2e8f0; /* hover:text-white */
+        }
+
+        .modal-content h2 {
+            font-size: 1.875rem; /* text-3xl */
+            font-weight: 700; /* font-bold */
+            margin-bottom: 1rem; /* mb-4 */
+            color: #60a5fa; /* text-blue-400 */
+        }
+
+        /* Loading Spinner */
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 12rem; /* h-48 */
+        }
+
+        .spinner {
+            border: 4px solid rgba(59, 130, 246, 0.2); /* border-t-4 border-b-4 border-blue-500 */
+            border-top: 4px solid #3b82f6;
+            border-bottom: 4px solid #3b82f6;
+            border-radius: 50%;
+            width: 4rem; /* w-16 */
+            height: 4rem; /* h-16 */
+            animation: spin 1s linear infinite; /* animate-spin */
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            margin-top: 1rem; /* mt-4 */
+            font-size: 1.125rem; /* text-lg */
+            color: #cbd5e0; /* text-gray-300 */
+        }
+
+        /* Article Content Styling (mimicking prose classes) */
+        .article-content {
+            color: #cbd5e0; /* text-gray-300 */
+            line-height: 1.625; /* leading-relaxed */
+        }
+
+        .article-content p {
+            margin-bottom: 1.5em; /* Increased paragraph spacing */
+        }
+
+        .article-content h1, .article-content h2, .article-content h3, .article-content h4, .article-content h5, .article-content h6 {
+            color: #60a5fa; /* Headings color */
+            margin-top: 1.5em;
+            margin-bottom: 0.75em;
+            font-weight: 700;
+        }
+        .article-content h1 { font-size: 2em; }
+        .article-content h2 { font-size: 1.75em; }
+        .article-content h3 { font-size: 1.5em; }
+
+        .article-content strong {
+            font-weight: 700;
+            color: #e2e8f0;
+        }
+
+        .article-content em {
+            font-style: italic;
+        }
+
+        .article-content ul {
+            list-style-type: disc;
+            padding-left: 1.5em;
+            margin-top: 1em;
+            margin-bottom: 1em;
+        }
+
+        .article-content li {
+            margin-bottom: 0.5em;
+        }
+
+        /* Styling for MathJax formulas */
+        .MathJax_Display { /* For block equations */
+            margin-top: 1em !important;
+            margin-bottom: 1em !important;
+            padding: 0.5rem;
+            background-color: #2d3748; /* bg-gray-800 */
+            border-radius: 0.25rem;
+            overflow-x: auto; /* Ensure horizontal scrolling if formula is too long */
+        }
+
+        /* For inline equations */
+        .MathJax_CHTML {
+            background-color: #2d3748; /* bg-gray-800 */
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace; /* Monospaced font for code */
+            font-size: 0.9em; /* Slightly smaller for inline */
+        }
+
+        /* Specific styling for code tags within the article content (if not processed by MathJax) */
+        .article-content code {
+            background-color: #2d3748; /* bg-gray-700 */
+            padding: 0.25rem 0.5rem; /* px-2 py-1 */
+            border-radius: 0.25rem; /* rounded */
+            color: #93c5fd; /* text-blue-300 */
+            font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace; /* font-mono */
+            font-size: 0.9em;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Physics Web</h1>
+        <p>Your AI-Powered Guide to the Cosmos of Physics</p>
+    </header>
+
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="Search for a physics term...">
+    </div>
+
+    <main id="physics-terms-accordion" class="accordion-container">
+        </main>
+
+    <div id="article-modal-overlay" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <button id="modal-close-button" class="modal-close-button">&times;</button>
+            <h2 id="modal-title"></h2>
+            <div id="modal-article-content" class="article-content">
+                </div>
+        </div>
+    </div>
+
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <script>
+        // Define the comprehensive list of physics terms, categorized for organization
+        const physicsTerms = [
+          {
+            category: "Classical Mechanics",
+            terms: [
+              "Newton's Laws", "Force", "Mass", "Acceleration", "Velocity", "Displacement",
+              "Work", "Energy", "Power", "Momentum", "Impulse", "Gravity", "Friction",
+              "Torque", "Rotational Motion", "Simple Harmonic Motion", "Pendulum",
+              "Waves", "Sound", "Doppler Effect", "Elasticity", "Stress", "Strain",
+              "Fluids", "Pressure", "Buoyancy", "Bernoulli's Principle", "Viscosity",
+              "Surface Tension", "Kinematics", "Dynamics", "Statics", "Conservation of Energy",
+              "Conservation of Momentum", "Centripetal Force", "Resonance", "Oscillation",
+              "Damping", "Wave Superposition", "Diffraction", "Refraction", "Reflection",
+              "Interference", "Standing Waves", "Fluid Dynamics", "Aerodynamics", "Hydrodynamics"
+            ]
+          },
+          {
+            category: "Thermodynamics",
+            terms: [
+              "Temperature", "Heat", "Thermal Energy", "Specific Heat", "Heat Transfer",
+              "Conduction", "Convection", "Radiation", "Zeroth Law of Thermodynamics",
+              "First Law of Thermodynamics", "Second Law of Thermodynamics",
+              "Third Law of Thermodynamics", "Entropy", "Enthalpy", "Gibbs Free Energy",
+              "Phase Transitions", "Ideal Gas Law", "Carnot Cycle", "Heat Engine",
+              "Refrigerator", "Absolute Zero", "Thermodynamic Equilibrium", "Internal Energy",
+              "Heat Capacity", "Thermal Expansion", "Latent Heat", "Boiling Point",
+              "Melting Point", "Sublimation", "Critical Point", "Triple Point"
+            ]
+          },
+          {
+            category: "Electromagnetism",
+            terms: [
+              "Electric Charge", "Coulomb's Law", "Electric Field", "Electric Potential",
+              "Voltage", "Current", "Resistance", "Ohm's Law", "Circuit", "Capacitance",
+              "Inductance", "Magnetic Field", "Magnetic Force", "Electromagnetic Induction",
+              "Faraday's Law", "Lenz's Law", "Maxwell's Equations", "Electromagnetic Waves",
+              "Light", "Photon", "Refraction of Light", "Reflection of Light", "Diffraction of Light",
+              "Interference of Light", "Polarization", "Electrons", "Protons", "Neutrons",
+              "Conductors", "Insulators", "Semiconductors", "Alternating Current (AC)",
+              "Direct Current (DC)", "Transformer", "Generator", "Motor", "Electrolysis",
+              "Magnetism", "Permeability", "Permittivity", "Resistor", "Capacitor", "Inductor"
+            ]
+          },
+          {
+            category: "Optics",
+            terms: [
+              "Light", "Reflection", "Refraction", "Lenses", "Mirrors", "Dispersion",
+              "Prism", "Rainbow", "Fiber Optics", "Holography", "Laser", "Optics",
+              "Geometric Optics", "Physical Optics", "Wave Optics", "Ray Optics",
+              "Snell's Law", "Total Internal Reflection", "Magnification", "Focal Length",
+              "Aberration", "Telescope", "Microscope", "Camera", "Human Eye"
+            ]
+          },
+          {
+            category: "Quantum Mechanics",
+            terms: [
+              "Quantum Mechanics", "Photon", "Electron", "Proton", "Neutron", "Atom",
+              "Nucleus", "Quantum Number", "Wave-Particle Duality", "Heisenberg's Uncertainty Principle",
+              "Schrödinger Equation", "Quantum Entanglement", "Quantum Superposition",
+              "Quantum Field Theory", "Standard Model", "Quarks", "Leptons", "Bosons",
+              "Fermions", "Spin", "Pauli Exclusion Principle", "Quantum Tunneling",
+              "Quantum Computing", "Quantum Cryptography", "Blackbody Radiation",
+              "Photoelectric Effect", "Compton Effect", "De Broglie Wavelength",
+              "Atomic Orbitals", "Particle Physics", "Nuclear Physics", "Quantum Electrodynamics (QED)",
+              "Quantum Chromodynamics (QCD)"
+            ]
+          },
+          {
+            category: "Relativity",
+            terms: [
+              "Special Relativity", "General Relativity", "Einstein", "Space-time",
+              "Time Dilation", "Length Contraction", "Mass-Energy Equivalence (E=mc²)",
+              "Lorentz Transformation", "Gravitational Lensing", "Black Holes",
+              "Wormholes", "Cosmology", "Big Bang", "Dark Matter", "Dark Energy",
+              "Gravitational Waves", "Frame of Reference", "Inertial Frame", "Non-Inertial Frame"
+            ]
+          },
+          {
+            category: "Astrophysics & Cosmology",
+            terms: [
+              "Universe", "Galaxy", "Star", "Planet", "Nebula", "Black Hole", "White Dwarf",
+              "Neutron Star", "Supernova", "Cosmic Microwave Background", "Hubble's Law",
+              "Redshift", "Blueshift", "Exoplanets", "Solar System", "Milky Way",
+              "Dark Matter", "Dark Energy",
+              "Gravitational Waves", "Frame of Reference", "Inertial Frame", "Non-Inertial Frame"
+            ]
+          },
+          {
+            category: "Condensed Matter Physics",
+            terms: [
+              "Solid State Physics", "Crystallography", "Semiconductors", "Superconductivity",
+              "Magnetism in Solids", "Phase Transitions", "Quantum Hall Effect",
+              "Topological Insulators", "Graphene", "Nanomaterials", "Liquid Crystals",
+              "Amorphous Solids", "Crystal Lattice", "Band Theory", "Fermi Surface",
+              "Phonons", "Excitons", "Spintronics", "Thermoelectric Effect"
+            ]
+          },
+          {
+            category: "Computational Physics",
+            terms: [
+              "Computational Physics", "Numerical Methods", "Simulation", "Modeling",
+              "Monte Carlo Method", "Finite Element Method", "Molecular Dynamics",
+              "Density Functional Theory", "High Performance Computing", "Data Analysis",
+              "Visualization", "Machine Learning in Physics", "Neural Networks"
+            ]
+          },
+          {
+            category: "Interdisciplinary Physics",
+            terms: [
+              "Biophysics", "Medical Physics", "Chemical Physics", "Geophysics",
+              "Atmospheric Physics", "Oceanography", "Acoustics", "Chaos Theory",
+              "Nonlinear Dynamics", "Statistical Mechanics", "Complex Systems",
+              "Network Theory", "Econophysics", "Sociophysics", "Quantum Chemistry"
+            ]
+          }
+        ];
+
+        // Get DOM elements
+        const searchInput = document.getElementById('search-input');
+        const physicsTermsAccordion = document.getElementById('physics-terms-accordion');
+        const articleModalOverlay = document.getElementById('article-modal-overlay');
+        const modalCloseButton = document.getElementById('modal-close-button');
+        const modalTitle = document.getElementById('modal-title');
+        const modalArticleContent = document.getElementById('modal-article-content');
+
+        let currentFilteredTerms = physicsTerms; // State equivalent for filtered terms
+
+        /**
+         * Renders the physics terms as an accordion based on the provided terms array.
+         * @param {Array} termsToRender - The array of categorized terms to display.
+         */
+        function renderTerms(termsToRender) {
+            physicsTermsAccordion.innerHTML = ''; // Clear existing terms
+            if (termsToRender.length === 0 || termsToRender.every(cat => cat.terms.length === 0)) {
+                physicsTermsAccordion.innerHTML = '<p class="no-terms-message text-center">No terms found for your search.</p>';
+                return;
+            }
+
+            termsToRender.forEach((categoryObj, index) => {
+                if (categoryObj.terms.length === 0) return; // Skip empty categories after filtering
+
+                const accordionItem = document.createElement('div');
+                accordionItem.className = 'accordion-item';
+
+                const accordionHeader = document.createElement('div');
+                accordionHeader.className = 'accordion-header';
+                accordionHeader.setAttribute('data-index', index); // Store index for toggling
+
+                const categoryTitle = document.createElement('h2');
+                categoryTitle.textContent = categoryObj.category;
+                accordionHeader.appendChild(categoryTitle);
+
+                const accordionIcon = document.createElement('span');
+                accordionIcon.className = 'accordion-icon';
+                accordionIcon.textContent = '>'; // Right arrow icon
+                accordionHeader.appendChild(accordionIcon);
+
+                const accordionContent = document.createElement('div');
+                accordionContent.className = 'accordion-content';
+
+                const termsContainer = document.createElement('div');
+                termsContainer.className = 'terms-container';
+
+                categoryObj.terms.forEach(term => {
+                    const termButton = document.createElement('button');
+                    termButton.className = 'term-button';
+                    termButton.textContent = term;
+                    termButton.addEventListener('click', (event) => {
+                        event.stopPropagation(); // Prevent accordion from toggling when term button is clicked
+                        handleTermClick(term);
+                    });
+                    termsContainer.appendChild(termButton);
+                });
+
+                accordionContent.appendChild(termsContainer);
+                accordionItem.appendChild(accordionHeader);
+                accordionItem.appendChild(accordionContent);
+                physicsTermsAccordion.appendChild(accordionItem);
+
+                // Add event listener for header to toggle accordion
+                accordionHeader.addEventListener('click', () => {
+                    accordionItem.classList.toggle('expanded');
+                    // Adjust max-height for smooth transition
+                    if (accordionItem.classList.contains('expanded')) {
+                        accordionContent.style.maxHeight = accordionContent.scrollHeight + "px";
+                    } else {
+                        accordionContent.style.maxHeight = "0";
+                    }
+                });
+            });
+        }
+
+        /**
+         * Filters the physics terms based on the search query.
+         * @param {string} query - The search string.
+         */
+        function filterTerms(query) {
+            if (query) {
+                const lowerCaseQuery = query.toLowerCase();
+                currentFilteredTerms = physicsTerms.map(categoryObj => ({
+                    ...categoryObj,
+                    terms: categoryObj.terms.filter(term =>
+                        term.toLowerCase().includes(lowerCaseQuery)
+                    )
+                })).filter(categoryObj => categoryObj.terms.length > 0); // Only keep categories with matching terms
+            } else {
+                currentFilteredTerms = physicsTerms;
+            }
+            renderTerms(currentFilteredTerms);
+        }
+
+        /**
+         * Displays a loading spinner in the modal.
+         */
+        function showLoadingSpinner() {
+            modalArticleContent.innerHTML = `
+                <div class="loading-container">
+                    <div class="spinner"></div>
+                    <p class="loading-text">Generating article...</p>
+                </div>
+            `;
+        }
+
+        /**
+         * Handles the click event on a physics term.
+         * Initiates article generation and shows the modal.
+         * @param {string} term - The physics term that was clicked.
+         */
+        async function handleTermClick(term) {
+            modalTitle.textContent = term;
+            showLoadingSpinner();
+            articleModalOverlay.style.display = 'flex'; // Show modal
+
+            try {
+                const prompt = `Generate a comprehensive, detailed, and easy-to-understand article about "${term}" in physics. This article should be suitable for a general audience with an interest in science, aiming for clarity and accuracy.
+
+Structure the article with the following sections, using Markdown headings:
+
+## Introduction
+- Briefly define what "${term}" is.
+
+## Key Principles and Concepts
+- Explain the fundamental ideas and theories associated with "${term}".
+- Break down complex ideas into simpler terms.
+
+## Relevant Formulas
+- Include any important mathematical formulas related to "${term}".
+- **Crucially, use standard LaTeX syntax for all mathematical expressions.**
+    - For **inline formulas**, use \`\\( ... \\)\` delimiters (e.g., \`\\(E=mc^2\\)\`).
+    - For **display (block) formulas**, use \`\\[ ... \\]\` delimiters (e.g., \`\\[ F = ma \\]\` or \`\\[ \\sum \\vec{F} = 0 \\]\`).
+- Ensure proper LaTeX commands for symbols (e.g., \`\\sum\` for summation, \`\\vec{F}\` for vector F, \`_{subscript}\`, \`^{superscript}\`).
+- Briefly explain each formula's components and significance.
+
+## Real-World Applications
+- Describe practical examples and applications of "${term}" in everyday life, technology, or other scientific fields.
+
+## Conclusion
+- Summarize the main points and reiterate the importance of "${term}" in physics.
+
+**Formatting Guidelines:**
+- Use Markdown for **bolding** (\`**text**\`), *italics* (\`*text*\`), and bulleted lists (\`- item\` or \`* item\`).
+- Maintain a clear, concise, and engaging writing style.
+- Avoid jargon where possible, or explain it clearly if necessary.`;
+
+                let chatHistory = [];
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+
+                const payload = { contents: chatHistory };
+                const apiKey = ""; // Canvas will provide this at runtime
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    let text = result.candidates[0].content.parts[0].text;
+
+                    // --- Markdown to HTML Conversion (Pre-MathJax processing) ---
+                    // Convert headings
+                    text = text.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+                    text = text.replace(/^## (.*$)/gim, '<h2>$1</h2>');
+                    text = text.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+
+                    // Convert bold text
+                    text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+                    // Convert italics
+                    text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
+
+                    // Convert list items
+                    const listItems = text.split('\n').map(line => {
+                        if (line.match(/^(\*|-)\s/)) {
+                            return `<li>${line.substring(line.indexOf(' ') + 1)}</li>`;
+                        }
+                        return line;
+                    }).join('\n');
+
+                    // Wrap consecutive list items in <ul> tags
+                    let formattedText = listItems.replace(/(<li>.*?<\/li>(\n|$))+/gs, '<ul>$&</ul>');
+
+                    // Replace double newlines with paragraph tags for block-level content
+                    // Ensure it doesn't wrap existing block elements or MathJax delimiters
+                    formattedText = formattedText.split('\n\n').map(paragraph => {
+                        if (!paragraph.startsWith('<h') && !paragraph.startsWith('<ul') && !paragraph.startsWith('<li') && !paragraph.startsWith('<strong>') && !paragraph.startsWith('\\(') && !paragraph.startsWith('\\[') && !paragraph.startsWith('$') && paragraph.trim() !== '') {
+                            return `<p>${paragraph}</p>`;
+                        }
+                        return paragraph;
+                    }).join('');
+
+                    // Clean up any remaining extra newlines
+                    formattedText = formattedText.replace(/\n/g, '');
+
+                    modalArticleContent.innerHTML = formattedText; // Set the generated article content
+
+                    // Trigger MathJax typesetting after content is loaded
+                    if (window.MathJax) {
+                        window.MathJax.typesetPromise([modalArticleContent]).then(() => {
+                            console.log("MathJax typesetting complete for modal content.");
+                        }).catch((err) => {
+                            console.error("MathJax typesetting error:", err);
+                        });
+                    }
+
+                } else {
+                    modalArticleContent.innerHTML = "Failed to generate article. Please try again.";
+                    console.error("API response structure unexpected:", result);
+                }
+            } catch (error) {
+                modalArticleContent.innerHTML = "An error occurred while fetching the article. Please check your network connection.";
+                console.error("Error generating article:", error);
+            }
+        }
+
+        /**
+         * Closes the article modal.
+         */
+        function closeModal() {
+            articleModalOverlay.style.display = 'none';
+            modalTitle.textContent = '';
+            modalArticleContent.innerHTML = '';
+        }
+
+        // Event Listeners
+        searchInput.addEventListener('input', (e) => {
+            filterTerms(e.target.value);
+        });
+
+        modalCloseButton.addEventListener('click', closeModal);
+
+        // Initial render of all terms when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTerms(physicsTerms);
+
+            // MathJax configuration on load
+            if (window.MathJax) {
+                window.MathJax.startup.ready = () => {
+                    window.MathJax.typesetClear();
+                    window.MathJax.tex.inlineMath = [['$', '$'], ['\\(', '\\)'], ['$$', '$$']];
+                    window.MathJax.tex.displayMath = [['$$', '$$'], ['\\[', '\\]']];
+                    window.MathJax.startup.defaultReady();
+                    console.log("MathJax configured and ready on DOMContentLoaded.");
+                };
+            }
+        });
+    </script>
+</body>
+</html>
