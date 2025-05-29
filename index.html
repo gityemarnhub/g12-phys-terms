@@ -6,21 +6,542 @@
     <title>The Written Word</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Apply Inter font to the entire body */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom styling for toggle switches */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 44px; /* Adjusted width for better appearance */
+            height: 24px; /* Adjusted height */
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: 24px; /* Make it round */
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px; /* Adjusted size */
+            width: 16px; /* Adjusted size */
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: 50%; /* Make it round */
+        }
+
+        input:checked + .slider {
+            background-color: #2563eb; /* blue-600 */
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2563eb;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(20px); /* Adjusted for new width */
+            -ms-transform: translateX(20px); /* Adjusted for new width */
+            transform: translateX(20px); /* Adjusted for new width */
+        }
+
+        /* Ensure textarea is scrollable */
+        textarea {
+            overflow-y: auto;
+        }
+        /* Custom message box styling (Toast) - REMOVED ALL CALLS TO THIS FUNCTION */
+        .message-container {
+            position: fixed;
+            bottom: 60px; /* Position moved up by 60px */
+            left: 0; /* Span full width */
+            right: 0; /* Span full width */
+            z-index: 1000;
+            display: flex; /* Use flexbox to center content */
+            justify-content: center; /* Center horizontally */
+            padding: 0 1rem; /* Small padding from screen edges for the container */
+        }
+
+        .message-box {
+            background-color: #333;
+            color: white;
+            padding: 12px 20px; /* Keep internal padding for readability */
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            margin-bottom: 0.5rem; /* Space between multiple messages if needed */
+            text-align: center; /* Center text within the box */
+            max-width: 500px; /* Max width for desktop readability */
+            width: auto; /* Let content determine width up to max-width */
+        }
+
+        .message-box.show {
+            opacity: 1;
+        }
+
+        .message-box.success {
+            background-color: #4CAF50; /* Green */
+        }
+
+        .message-box.error {
+            background-color: #f44336; /* Red */
+        }
+
+        .message-box.info {
+            background-color: #2196F3; /* Blue */
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.375rem; /* rounded-md */
+            z-index: 10; /* Above content */
+            transition: opacity 0.3s ease-in-out;
+            opacity: 0;
+            visibility: hidden;
+        }
+        .loading-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Spinner */
+        .loading-spinner {
+            border: 4px solid #f3f3f3; /* Light grey */
+            border-top: 4px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Full-screen Modal for Reading Article */
+        .fullscreen-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8); /* Dark overlay */
+            display: flex;
+            align-items: center; /* Changed from center to stretch for vertical expansion */
+            justify-content: center;
+            z-index: 2000; /* Higher than other elements */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .fullscreen-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content-wrapper {
+            background-color: white;
+            overflow-y: hidden; /* Handled by inner container */
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            color: #333; /* Darker text for readability */
+            box-sizing: border-box; /* Include padding in width/height */
+            display: flex;
+            flex-direction: column;
+            /* Default for mobile: full screen, no padding */
+            width: 100%;
+            height: 100%;
+            padding: 0; /* No padding for the wrapper itself */
+            background-color: #2d3748; /* Darker background for dark mode */
+            color: #e2e8f0; /* Lighter text for dark mode */
+        }
+
+        /* On medium screens and up, set a fixed size */
+        @media (min-width: 640px) {
+            .modal-content-wrapper {
+                width: 90%; /* Increased desktop width */
+                height: 90%; /* Increased desktop height */
+            }
+        }
+
+        /* Modal close button improvements */
+        /* Adjusted to be part of font-size-controls, no longer fixed */
+        .modal-close-btn {
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #333; /* Darker color for contrast */
+            border-radius: 9999px; /* Fully rounded */
+            width: 2.5rem; /* Fixed width for a circle */
+            height: 2.5rem; /* Fixed height for a circle */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+            transition: background-color 0.2s, color 0.2s, transform 0.2s;
+            /* Removed fixed positioning */
+            background-color: #4a5568; /* Darker gray for dark mode */
+            color: #e2e8f0; /* Lighter text for dark mode */
+        }
+
+        .modal-close-btn:hover {
+            background-color: #e0e0e0; /* Slightly darker on hover */
+            color: #000;
+            transform: scale(1.05); /* Slight scale up on hover */
+        }
+
+        /* Article content container - handles scrolling and horizontal padding */
+        .modal-article-content-scroll {
+            flex-grow: 1; /* Allows content to take up available vertical space */
+            overflow-y: auto; /* Enable scrolling for long content */
+            padding: 0; /* No top/bottom padding here */
+        }
+
+        /* Title and Text elements within the scrollable container */
+        .modal-article-title {
+            font-size: 1.5rem; /* Slightly smaller title in modal */
+            font-weight: bold;
+            color: #1a202c;
+            margin-bottom: 0; /* Remove default margin */
+            padding: 0 1rem; /* Horizontal padding, no top/bottom */
+            color: #e2e8f0; /* Lighter text for dark mode */
+        }
+
+        .modal-article-text {
+            white-space: pre-wrap; /* Preserve whitespace and line breaks */
+            word-wrap: break-word;
+            font-size: 1.25rem;
+            line-height: 1.6;
+            padding: 0 1rem; /* Horizontal padding, 0 top/bottom */
+            padding-bottom: 10rem; /* Increased padding at the bottom for extra scrolling */
+            color: #e2e8f0; /* Lighter text for dark mode */
+        }
+
+        /* Ensure rendered markdown elements also have proper styling */
+        .modal-article-text h1, .modal-article-text h2, .modal-article-text h3,
+        .modal-article-text h4, .modal-article-text h5, .modal-article-text h6 {
+            font-weight: bold;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            padding: 0 1rem; /* Match parent padding */
+        }
+        .modal-article-text h1 { font-size: 2.25rem; }
+        .modal-article-text h2 { font-size: 2rem; }
+        .modal-article-text h3 { font-size: 1.75rem; }
+        .modal-article-text h4 { font-size: 1.5rem; }
+        .modal-article-text h5 { font-size: 1.25rem; }
+        .modal-article-text h6 { font-size: 1rem; }
+
+        .modal-article-text ul, .modal-article-text ol {
+            padding-left: 2rem; /* Indent lists */
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+            padding-right: 1rem; /* Match parent padding */
+        }
+        .modal-article-text li {
+            margin-bottom: 0.25rem;
+        }
+
+        /* Responsive horizontal padding for larger screens */
+        @media (min-width: 640px) { /* Tailwind's sm breakpoint */
+            .modal-article-title {
+                padding: 0 2rem; /* Increased horizontal padding for desktop */
+            }
+            .modal-article-text {
+                padding: 0 2rem; /* Increased horizontal padding for desktop */
+            }
+            .modal-article-text h1, .modal-article-text h2, .modal-article-text h3,
+            .modal-article-text h4, .modal-article-text h5, .modal-article-text h6,
+            .modal-article-text ul, .modal-article-text ol {
+                padding-left: 2rem; /* Consistent indent for lists and headings */
+                padding-right: 2rem;
+            }
+        }
+
+        /* Font size controls */
+        .font-size-controls {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem; /* Reduced padding, removed top/bottom padding */
+            align-items: center;
+            justify-content: space-between; /* Changed to space-between for left/right alignment */
+            background-color: white;
+            border-bottom: 1px solid #eee;
+            background-color: #2d3748; /* Darker background for dark mode */
+            border-color: #4a5568; /* Darker border for dark mode */
+        }
+
+        .font-size-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .font-size-button {
+            background-color: #f3f4f6; /* Light gray */
+            color: #4a5568; /* Dark gray */
+            border: none;
+            border-radius: 0.25rem; /* Rounded corners */
+            padding: 0.25rem 0.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+            background-color: #4a5568; /* Darker gray for dark mode */
+            color: #e2e8f0; /* Lighter text for dark mode */
+        }
+
+        .font-size-button:hover {
+            background-color: #e5e7eb; /* Slightly darker gray */
+        }
+
+        /* Spinner for buttons */
+        .button-spinner {
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid #fff;
+            border-radius: 50%;
+            width: 1em; /* Relative to font size */
+            height: 1em; /* Relative to font size */
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 0.5em; /* Space between text and spinner */
+        }
+
+        /* Word Meaning Pop-up */
+        .word-meaning-popup {
+            position: absolute;
+            background-color: #333;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 2001; /* Higher than modal */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+            transform: translateY(10px); /* Start slightly below */
+            max-width: 300px;
+            text-align: left;
+            font-size: 0.9rem;
+            background-color: #4a5568; /* Darker gray for dark mode */
+            color: #e2e8f0; /* Lighter text */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .word-meaning-popup.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Styles for visual grouping of toggles */
+        .toggle-group-container {
+            border: 1px solid #e2e8f0; /* Light border */
+            border-radius: 0.5rem; /* Rounded corners */
+            padding: 1rem; /* Padding inside */
+            background-color: #f8fafc; /* Very light background */
+            margin-top: 1rem; /* Space from elements above */
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); /* Subtle inner shadow */
+            border-color: #4a5568; /* Darker border in dark mode */
+            background-color: #2d3748; /* Darker background in dark mode */
+        }
+
+        /* Saved Notes Modal styles */
+        .saved-notes-modal, .view-note-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000; /* Higher than article modal */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .saved-notes-modal.show, .view-note-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .saved-notes-content { /* Specific content styling for saved notes list modal */
+            background-color: #2d3748; /* Dark background */
+            color: #e2e8f0; /* Light text */
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .saved-notes-content h2 {
+            font-size: 1.75rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #a0aec0; /* Lighter gray for headings */
+        }
+
+        .saved-notes-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+            overflow-y: auto;
+            padding-right: 0.5rem; /* For scrollbar */
+        }
+
+        .saved-notes-list li {
+            background-color: #4a5568; /* Slightly lighter dark */
+            margin-bottom: 0.75rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #667eea; /* Blue border */
+        }
+
+        .saved-notes-list li span {
+            font-weight: 500;
+            flex-grow: 1;
+            margin-right: 1rem;
+        }
+
+        .saved-notes-list li button {
+            background-color: #6366f1; /* Indigo */
+            color: white;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            transition: background-color 0.2s;
+            font-size: 0.875rem; /* Smaller font for action buttons */
+            margin-left: 0.5rem;
+        }
+
+        .saved-notes-list li button:hover {
+            background-color: #4f46e5;
+        }
+
+        .saved-notes-list li .delete-btn {
+            background-color: #ef4444; /* Red */
+        }
+
+        .saved-notes-list li .delete-btn:hover {
+            background-color: #dc2626;
+        }
+
+        .modal-close-btn-top-right {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #e2e8f0;
+            border-radius: 9999px;
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .modal-close-btn-top-right:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Removed specific overrides for view-note-content children to ensure consistency */
+        /* .view-note-content .font-size-controls { ... } */
+        /* .view-note-content .modal-article-title { ... } */
+        /* .view-note-content .modal-article-text { ... } */
+
+        /* Smaller buttons for main actions */
+        .main-action-button {
+            padding: 0.5rem 1rem; /* Smaller padding */
+            font-size: 0.875rem; /* Smaller font size */
+            width: auto; /* Let content dictate width */
+            display: flex; /* Use flexbox for centering icon and text */
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem; /* Space between icon and text */
+        }
+        .main-action-button svg {
+            width: 1.25em; /* Icon size relative to font-size */
+            height: 1.25em;
+        }
+
+        /* Responsive width for article action buttons */
+        .article-action-button {
+            padding: 0.5rem 0.75rem; /* Adjusted padding for icons */
+            font-size: 0.875rem; /* Smaller font size */
+            flex-grow: 1; /* Allow buttons to grow and fill available space */
+            min-width: 4rem; /* Adjusted min-width for icons */
+            max-width: 8rem; /* Adjusted max-width for icons */
+            display: flex; /* Use flexbox for centering icon */
+            align-items: center; /* Center icon vertically */
+            justify-content: center; /* Center icon horizontally */
+            gap: 0.25rem; /* Small gap between icon and text if text were present */
+        }
+        .article-action-button svg {
+            width: 1.25em; /* Icon size relative to font-size */
+            height: 1.25em;
+        }
+    </style>
 </head>
-<body class="bg-gray-900 px-4 pt-8 pb-32 min-h-screen flex flex-col items-center justify-center">
+<body class="bg-gray-900 px-4 pt-4 pb-32 min-h-screen flex flex-col items-center justify-center">
     <div class="message-container" id="messageContainer"></div>
 
-    <div class="container mx-auto bg-gray-800 rounded-xl shadow-2xl max-w-6xl w-full p-6 md:p-8">
-        <header class="bg-gray-700 rounded-lg p-4 shadow-md border border-gray-700 text-center flex flex-col sm:flex-row items-center justify-between mb-8">
-            <h1 class="text-3xl font-extrabold text-gray-100 mb-2 sm:mb-0">The Written Word</h1>
-            <button id="viewSavedNotesBtn" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition duration-300 shadow-lg text-base font-semibold">
+    <div class="container mx-auto bg-gray-800 rounded-xl shadow-2xl max-w-6xl w-full">
+        <header class="bg-gray-700 rounded-lg p-4 shadow-sm border border-gray-700 text-center flex items-center justify-between">
+            <h1 class="text-xl font-bold text-gray-100">The Written Word</h1>
+            <button id="viewSavedNotesBtn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition duration-300 shadow-md text-sm">
                 Saved Notes
             </button>
         </header>
 
-        <div class="mb-8 px-4 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <textarea id="topicInput" rows="1" placeholder="Enter article topic (e.g., 'The history of AI', 'Benefits of meditation')" class="flex-grow w-full sm:w-auto min-w-[200px] px-4 py-3 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-200 placeholder-gray-400 bg-gray-700 text-base resize-y"></textarea>
+        <div class="mt-8 mb-8 px-4 flex flex-row flex-wrap items-center justify-center gap-4">
+            <textarea id="topicInput" rows="1" placeholder="Enter article topic (e.g., 'The history of AI', 'Benefits of meditation')" class="flex-grow min-w-[100px] px-4 py-3 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-200 placeholder-gray-400 bg-gray-700 resize-y"></textarea>
             <button id="mainGenerateBtn" class="bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 shadow-md flex-shrink-0 main-action-button" title="Generate Article">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles">
                     <path d="M10.5 17.5L8 20l-2.5-2.5L3 15.5l2.5-2.5L8 10l2.5 2.5L13 15.5l-2.5 2.5z"/>
@@ -40,14 +561,14 @@
             </button>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 p-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div class="space-y-6">
-                <div class="p-6 rounded-xl bg-gray-700 border border-gray-600 shadow-lg">
-                    <h2 class="text-2xl font-bold text-gray-100 mb-5">Article Options</h2>
+                <div class="p-5 rounded-lg">
+                    <h2 class="text-xl font-semibold text-gray-200 mb-4">Article Options</h2>
                     <div id="articleOptionsContent" class="space-y-4">
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-2 sm:space-y-0">
-                            <label for="format" class="text-gray-300 w-full sm:w-1/2 text-lg" title="Choose the overall format for the generated text.">Format :</label>
-                            <select id="format" class="w-full sm:w-1/2 p-3 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-800 text-gray-200 transition duration-200 ease-in-out text-base">
+                            <label for="format" class="text-gray-300 w-full sm:w-1/2" title="Choose the overall format for the generated text.">Format :</label>
+                            <select id="format" class="w-full sm:w-1/2 p-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-gray-200 transition duration-200 ease-in-out">
                                 <option selected>Essay</option>
                                 <option>Letter</option>
                                 <option>Email</option>
@@ -101,8 +622,8 @@
                             </select>
                         </div>
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-2 sm:space-y-0">
-                            <label for="coreTone" class="text-gray-300 w-full sm:w-1/2 text-lg" title="Select the primary emotional or stylistic tone of the article.">Core Tone :</label>
-                            <select id="coreTone" class="w-full sm:w-1/2 p-3 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-800 text-gray-200 transition duration-200 ease-in-out text-base">
+                            <label for="coreTone" class="text-gray-300 w-full sm:w-1/2" title="Select the primary emotional or stylistic tone of the article.">Core Tone :</label>
+                            <select id="coreTone" class="w-full sm:w-1/2 p-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-gray-200 transition duration-200 ease-in-out">
                                 <option value="Neutral/Objective" selected>😐 Neutral/Objective</option>
                                 <option value="Positive">😊 Positive</option>
                                 <option value="Negative">😠 Negative</option>
@@ -115,25 +636,25 @@
                             </select>
                         </div>
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-2 sm:space-y-0">
-                            <label for="articleType" class="text-gray-300 w-full sm:w-1/2 text-lg" title="Choose a specific writing style or sub-tone within the core tone.">Type :</label>
-                            <select id="articleType" class="w-full sm:w-1/2 p-3 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-800 text-gray-200 transition duration-200 ease-in-out text-base">
+                            <label for="articleType" class="text-gray-300 w-full sm:w-1/2" title="Choose a specific writing style or sub-tone within the core tone.">Type :</label>
+                            <select id="articleType" class="w-full sm:w-1/2 p-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-gray-200 transition duration-200 ease-in-out">
                             </select>
                         </div>
                         <div class="flex items-center justify-between">
-                            <label for="words" class="text-gray-300 text-lg" title="Set the approximate number of words for the generated content.">Approximate words :</label>
-                            <input type="number" id="words" value="700" class="p-3 border border-gray-600 rounded-md w-28 text-center focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-200 transition duration-200 ease-in-out bg-gray-800 text-base">
+                            <label for="words" class="text-gray-300" title="Set the approximate number of words for the generated content.">Approximate words :</label>
+                            <input type="number" id="words" value="700" class="p-2 border border-gray-600 rounded-md w-24 text-center focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-200 transition duration-200 ease-in-out bg-gray-700">
                         </div>
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-2 sm:space-y-0">
-                            <label for="language" class="text-gray-300 w-full sm:w-1/2 text-lg" title="Select the language for the generated article.">Language :</label>
-                            <select id="language" class="w-full sm:w-1/2 p-3 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-800 text-gray-200 transition duration-200 ease-in-out text-base">
+                            <label for="language" class="text-gray-300 w-full sm:w-1/2" title="Select the language for the generated article.">Language :</label>
+                            <select id="language" class="w-full sm:w-1/2 p-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-gray-200 transition duration-200 ease-in-out">
                                 <option selected>Burmese</option>
                                 <option>English</option>
                                 <option>Spanish</option>
                             </select>
                         </div>
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-2 sm:space-y-0">
-                            <label for="knowledgeLevel" class="text-gray-300 w-full sm:w-1/2 text-lg" title="Tailor the complexity and vocabulary for a specific age group or audience.">Target Age Group :</label>
-                            <select id="knowledgeLevel" class="w-full sm:w-1/2 p-3 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-800 text-gray-200 transition duration-200 ease-in-out text-base">
+                            <label for="knowledgeLevel" class="text-gray-300 w-full sm:w-1/2" title="Tailor the complexity and vocabulary for a specific age group or audience.">Target Age Group :</label>
+                            <select id="knowledgeLevel" class="w-full sm:w-1/2 p-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-gray-200 transition duration-200 ease-in-out">
                                 <option>Children (6-12)</option>
                                 <option>Teenagers (13-18)</option>
                                 <option>Young Adults (19-30)</option>
@@ -142,23 +663,23 @@
                                 <option selected>General Audience</option>
                             </select>
                         </div>
-                        <div class="space-y-5 toggle-group-container">
+                        <div class="space-y-4">
                             <div class="flex items-center justify-between">
-                                <label for="hashtags" class="text-gray-300 text-lg" title="Include relevant hashtags at the end of the article.">Add hash tags :</label>
+                                <label for="hashtags" class="text-gray-300" title="Include relevant hashtags at the end of the article.">Add hash tags :</label>
                                 <label class="toggle-switch">
                                     <input type="checkbox" id="hashtags" checked>
                                     <span class="slider"></span>
                                 </label>
                             </div>
                             <div class="flex items-center justify-between">
-                                <label for="emoji" class="text-gray-300 text-lg" title="Include relevant emojis within the article text.">Include emoji :</label>
+                                <label for="emoji" class="text-gray-300" title="Include relevant emojis within the article text.">Include emoji :</label>
                                 <label class="toggle-switch">
                                     <input type="checkbox" id="emoji">
                                     <span class="slider"></span>
                                 </label>
                             </div>
                             <div class="flex items-center justify-between">
-                                <label for="englishTerms" class="text-gray-300 text-lg" title="Ensures specific technical or key terms remain in English, even if the article's main language is different.">English Terms :</label>
+                                <label for="englishTerms" class="text-gray-300" title="Ensures specific technical or key terms remain in English, even if the article's main language is different.">English Terms :</label>
                                 <label class="toggle-switch">
                                     <input type="checkbox" id="englishTerms" checked>
                                     <span class="slider"></span>
@@ -168,22 +689,22 @@
                     </div>
                 </div>
 
-                <div class="p-6 rounded-xl bg-gray-700 border border-gray-600 shadow-lg">
-                    <label for="additional-prompt" class="block text-gray-300 mb-3 text-lg">Add further instructions or refinements here...</label>
-                    <textarea id="additional-prompt" rows="3" class="w-full p-3 border border-gray-600 rounded-md bg-gray-800 text-gray-200 text-base resize-y focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"></textarea>
+                <div class="p-5 rounded-lg">
+                    <label for="additional-prompt" class="block text-gray-300 mb-2">Add further instructions or refinements here...</label>
+                    <textarea id="additional-prompt" rows="1" class="w-full p-3 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-200 resize-y transition duration-200 ease-in-out bg-gray-700 placeholder-gray-400"></textarea>
                 </div>
             </div>
 
-            <div class="space-y-6 p-6 rounded-xl bg-gray-700 border border-gray-600 shadow-lg">
-                <div class="flex flex-col items-center mb-5">
-                    <h2 class="text-2xl font-bold text-gray-100 mb-3" id="improvedArticleTitle">Article Title</h2>
-                    <button id="regenerateTitleBtn" class="bg-gray-600 text-gray-200 px-4 py-2 rounded-lg text-sm hover:bg-gray-500 transition duration-300 shadow-md font-medium">
+            <div class="space-y-6 p-5 rounded-lg border border-gray-700">
+                <div class="flex flex-col items-center mb-4">
+                    <h2 class="text-2xl font-bold text-gray-100 mb-2" id="improvedArticleTitle">Article Title</h2>
+                    <button id="regenerateTitleBtn" class="bg-gray-600 text-gray-200 px-3 py-1 rounded-lg text-sm hover:bg-gray-500 transition duration-300 shadow-sm">
                         <span id="regenerateTitleBtnText">Regenerate Title</span>
                         <span id="regenerateTitleBtnSpinner" class="button-spinner hidden"></span>
                     </button>
                 </div>
                 <div class="relative">
-                    <textarea id="articleContent" rows="15" class="w-full p-4 border border-gray-600 rounded-lg bg-gray-800 text-gray-200 text-base resize-y focus:outline-none">
+                    <textarea id="articleContent" rows="10" class="w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-gray-200 resize-y focus:outline-none">
                         ဟေး! ဒီဆောင်းပါးလေးကတော့ AI နဲ့ ရေးထားတာနော်။ အခုခေတ်မှာ AI တွေက ဘယ်လောက်တောင် တော်နေပြီလဲဆိုတာ ပြသထားတာပေါာ့။ စာရေးတာတို့၊ သတင်းတွေထုတ်တာတို့ဆို AI က အကုန်လုပ်ပေးနိုင်နေပြီ။ Open AI လို ကုမ္ပဏီတွေက ဖန်တီးထားတဲ့ AI တွေဆို စာတွေအများကြီးကို ဖတ်ပြီး ဘာအကြောင်းအရာနဲ့ ပတ်သက်တာလဲ၊ ဘယ်လိုရေးရင် ကောင်းမလဲဆိုတာ အကုန်သိတယ်။ သဒ္ဒါတွေ၊ စကားလုံးအသုံးအနှုန်းတွေကအစ အတိအကျသိတော့ ဖတ်လို့ကောင်းတဲ့ စာသားတွေ ထွက်လာတာပေါာ့။
 
                         ဒီဥပမာလေးက AI ရဲ့ စာရေးနိုင်စွမ်းကို ပြသတာပါ။ စာရေးတဲ့ အလုပ်တွေ၊ သတင်းစာပညာတို့၊ စာနဲ့ပတ်သက်တဲ့ လုပ်ငန်းတွေမှာ AI က ဘယ်လောက်ထိ အရေးပါလာမလဲဆိုတာကို မြင်သာစေတယ်။ နည်းပညာတွေ တိုးတက်လာတာနဲ့အမျှ AI နဲ့ ရေးထားတဲ့ ဆောင်းပါးတွေက ပိုပြီး လှလာ၊ ပိုပြီး ဆန်းသစ်လာတယ်။ စာရေးတဲ့ လုပ်ငန်းတွေကို အလိုအလျောက်လုပ်ဆောင်နိုင်ဖို့ လမ်းစတွေ ဖန်တီးပေးနေတာပေါ့။ ဒါပေမဲ့ လူသားဆန်တဲ့ ရေးသားဟန်ကိုတော့ AI က အပြည့်အဝ အစားထိုးနိုင်မှာ မဟုတ်သေးဘူးနော်။ လူတွေရဲ့ ခံစားချက်တွေ၊ အတွေးအမြင်တွေကတော့ အမြဲတမ်း ထူးခြားနေမှာပဲ။
@@ -195,11 +716,11 @@
                     </textarea>
                     <div id="articleLoadingOverlay" class="loading-overlay">
                         <div class="loading-spinner"></div>
-                        <p class="text-gray-300 mt-4 text-lg font-medium">Generating article...</p>
+                        <p class="text-gray-600 mt-2">Generating article...</p>
                     </div>
                 </div>
                 <div class="flex flex-row justify-center mt-6 gap-4">
-                    <button id="copyArticleBtn" class="bg-gray-600 text-gray-200 rounded-lg hover:bg-gray-500 transition duration-300 shadow-md article-action-button" title="Copy Article">
+                    <button id="copyArticleBtn" class="bg-gray-600 text-gray-200 rounded-lg hover:bg-gray-500 transition duration-300 shadow-sm article-action-button" title="Copy Article">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clipboard">
                             <rect width="8" height="4" x="8" y="2" rx="1" ry="1"/>
                             <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
@@ -221,7 +742,7 @@
                         </svg>
                         <span id="regenerateArticleBtnSpinner" class="button-spinner hidden"></span>
                     </button>
-                    <button id="viewArticleBtn" class="bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-300 shadow-md article-action-button" title="View Article">
+                    <button id="readArticleBtn" class="bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-300 shadow-md article-action-button" title="Read Article">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9.383 3.017a1 1 0 01.277 1.015l-1.5 5a1 1 0 01-1.292.544l-3.374-1.012a1 1 0 01-.544-1.292l1.5-5a1 1 0 011.015-.277l3.374 1.012zM15 11a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1zM6 15a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1zM11 15a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
                     </button>
                 </div>
@@ -237,6 +758,10 @@
                     <button id="increaseFontSize" class="font-size-button">+</button>
                 </div>
                 <div class="flex items-center gap-2">
+                    <button id="playPauseArticleBtn" class="font-size-button text-xl">
+                        <span id="playIcon">▶</span>
+                        <span id="pauseIcon" class="hidden">⏸</span>
+                    </button>
                     <button id="modalCloseBtn" class="modal-close-btn">&times;</button>
                 </div>
             </div>
@@ -260,21 +785,1008 @@
     </div>
 
     <div id="viewNoteModal" class="view-note-modal">
-        <div class="modal-content-wrapper">
-            <div class="font-size-controls">
+        <div class="modal-content-wrapper"> <div class="font-size-controls">
                 <div class="font-size-group">
                     <button id="viewNoteDecreaseFontSize" class="font-size-button">-</button>
                     <button id="viewNoteIncreaseFontSize" class="font-size-button">+</button>
                 </div>
-                <button id="viewNoteCloseBtn" class="modal-close-btn">&times;</button>
-            </div>
-            <div id="viewNoteContentScroll" class="modal-article-content-scroll">
-                <h2 id="viewNoteTitle" class="modal-article-title"></h2>
+                <button id="viewNotePlayPauseBtn" class="font-size-button text-xl">
+                    <span id="viewNotePlayIcon">▶</span>
+                    <span id="viewNotePauseIcon" class="hidden">⏸</span>
+                </button>
+                <button id="viewNoteCloseBtn" class="modal-close-btn">&times;</button> </div>
+            <div id="viewNoteContentScroll" class="modal-article-content-scroll"> <h2 id="viewNoteTitle" class="modal-article-title"></h2>
                 <div id="viewNoteText" class="modal-article-text"></div>
             </div>
         </div>
     </div>
 
-    <script src="script.js"></script>
+
+    <script>
+        // Data structure for core tones and their associated types with emojis
+        const toneTypes = {
+            "Positive": [
+                "✨ Optimistic", "😄 Joyful", "🤩 Enthusiastic", "🙏 Hopeful", "👏 Appreciative",
+                "👍 Encouraging", "💡 Inspirational", "🤝 Friendly", "☀️ Warm", "😂 Amused",
+                "🥳 Excited", "😮 Awe-struck"
+            ],
+            "Neutral/Objective": [
+                "⚖️ Impartial", "✅ Factual", "📏 Unbiased", "ℹ️ Informative", "⚪ Detached",
+                "🧘 Calm", "➡️ Straightforward", "🔬 Analytic", "📋 Matter-of-fact"
+            ],
+            "Negative": [
+                "👎 Critical", "😔 Pessimistic", "😡 Angry", "😞 Sad", "😏 Sarcastic",
+                "🤦 Ironic", "😤 Frustrated", "👊 Aggressive", "👋 Dismissive", "😟 Worried",
+                " 🌑 Somber", "😔 Regretful", "🍋 Bitter", " 🤨 Cynical",
+                "👉 Accusatory", " ⚔️ Hostile", "😒 Annoyed"
+            ],
+            "Formal": [
+                "👨‍💼 Professional", " 🙇 Respectful", " 👑 Dignified", "🎓 Academic",
+                "📜 Authoritative", "😐 Serious", " 🏛️ Solemn", " 🤝 Polite", "🧍 Stiff"
+            ],
+            "Informal": [
+                "👕 Casual", "😊 Friendly", "😌 Relaxed", "💬 Conversational", " 🗣️ Colloquial",
+                "🗣️ Chatty", "🚶 Easygoing"
+            ],
+            "Persuasive": [
+                "🤝 Convincing", "✨ Influential", "🚀 Motivational", "💪 Assertive", " 🗣️ Argumentative",
+                "⏰ Urgent", " 🌟 Compelling", "🧑‍🏫 Didactic"
+            ],
+            "Informative": [
+                "🎓 Educational", " 🗺️ Instructive", "🖼️ Descriptive", "❓ Explanatory",
+                "🧑‍🏫 Didactic", "🤔 Curious"
+            ],
+            "Emotional": [
+                "🫂 Empathetic", "❤️‍🔥 Passionate", "💔 Vulnerable", "😔 Sympathetic", " ❤️ Compassionate",
+                " 📸 Sentimental", " ☔ Melancholy", " 😬 Anxious",
+                " 😨 fearful", " ✨ Hopeful", " 🎭 Dramatic"
+            ],
+            "Humorous": [
+                "🧠 Witty", "😏 Sarcastic", " 😈 Playful", " 🙃 Ironic",
+                "🤪 Comical", "😁 Joking", "🏜️ Dry", "👽 Absurd", "🧚 Whimsical"
+            ]
+        };
+
+        const formatsList = [
+            "Essay", "Letter", "Email", "Social Media Post", "Report", "Article",
+            "Short Story", "Blog Post", "Memo (Memorandum)", "Note", "Lyrics",
+            "Reply Message", "Comment", "Product Review", "Recipe", "Job Application",
+            "Poem", "Speech", "Script", "User Manual", "FAQ", "Press Release",
+            "Biography", "Travel Itinerary", "Meeting Minutes", "Lesson Plan",
+            "Quiz Questions", "Dialogue", "Complaint Letter",
+            "Thank You Note",
+            "Proposal", "Critique", "Case Study", "White Paper", "Interview Questions",
+            "Personal Statement", "Eulogy", "Slogan/Tagline", "Headline", "Synopsis",
+            "Abstract", "Executive Summary", "Character Sketch", "Worldbuilding Lore",
+            "Game Description", "Marketing Email", "Sales Pitch", "Customer Service Response",
+            "Internal Communication", "Press Kit", "Advertisement Copy" // Moved "Advertisement Copy" here to maintain alphabetical order
+        ];
+
+        const knowledgeLevels = [
+            "Children (6-12)", "Teenagers (13-18)", "Young Adults (19-30)",
+            "Adults (30-60)", "Seniors (60+)", "General Audience"
+        ];
+
+        // Get elements
+        const topicInput = document.getElementById('topicInput');
+        const formatSelect = document.getElementById('format');
+        const coreToneSelect = document.getElementById('coreTone');
+        const articleTypeSelect = document.getElementById('articleType');
+        const wordsInput = document.getElementById('words');
+        const languageSelect = document.getElementById('language');
+        const hashtagsCheckbox = document.getElementById('hashtags');
+        const emojiCheckbox = document.getElementById('emoji');
+        const knowledgeLevelSelect = document.getElementById('knowledgeLevel');
+        const englishTermsCheckbox = document.getElementById('englishTerms');
+        const additionalPromptTextarea = document.getElementById('additional-prompt');
+
+        const mainGenerateBtn = document.getElementById('mainGenerateBtn');
+        const surpriseMeBtn = document.getElementById('surpriseMeBtn');
+        const copyArticleBtn = document.getElementById('copyArticleBtn');
+        const saveNoteBtn = document.getElementById('saveNoteBtn'); // New element
+        const regenerateArticleBtn = document.getElementById('regenerateArticleBtn');
+        const readArticleBtn = document.getElementById('readArticleBtn');
+        const viewSavedNotesBtn = document.getElementById('viewSavedNotesBtn'); // New element
+
+        const articleContent = document.getElementById('articleContent');
+        const articleLoadingOverlay = document.getElementById('articleLoadingOverlay');
+        const improvedArticleTitle = document.getElementById('improvedArticleTitle');
+        const regenerateTitleBtn = document.getElementById('regenerateTitleBtn');
+
+        // Modal elements
+        const articleModal = document.getElementById('articleModal');
+        const modalCloseBtn = document.getElementById('modalCloseBtn');
+        const modalArticleTitle = document.getElementById('modalArticleTitle');
+        const modalArticleText = document.getElementById('modalArticleText');
+        const decreaseFontSizeBtn = document.getElementById('decreaseFontSize');
+        const increaseFontSizeBtn = document.getElementById('increaseFontSize');
+
+        // New elements for play/pause
+        const playPauseArticleBtn = document.getElementById('playPauseArticleBtn');
+        const playIcon = document.getElementById('playIcon');
+        const pauseIcon = document.getElementById('pauseIcon');
+
+        // Word meaning popup elements
+        const wordMeaningPopup = document.getElementById('wordMeaningPopup');
+
+        // Saved Notes Modal elements
+        const savedNotesModal = document.getElementById('savedNotesModal');
+        const savedNotesCloseBtn = document.getElementById('savedNotesCloseBtn');
+        const savedNotesList = document.getElementById('savedNotesList');
+
+        // View Single Note Modal elements
+        const viewNoteModal = document.getElementById('viewNoteModal');
+        const viewNoteCloseBtn = document.getElementById('viewNoteCloseBtn');
+        const viewNoteTitle = document.getElementById('viewNoteTitle');
+        const viewNoteText = document.getElementById('viewNoteText');
+        const viewNoteDecreaseFontSize = document.getElementById('viewNoteDecreaseFontSize');
+        const viewNoteIncreaseFontSize = document.getElementById('viewNoteIncreaseFontSize');
+        const viewNotePlayPauseBtn = document.getElementById('viewNotePlayPauseBtn');
+        const viewNotePlayIcon = document.getElementById('viewNotePlayIcon');
+        const viewNotePauseIcon = document.getElementById('viewNotePauseIcon');
+
+
+        // Initial font size for the modal article text
+        let currentFontSize = parseFloat(window.getComputedStyle(modalArticleText).fontSize);
+        let viewNoteCurrentFontSize = parseFloat(window.getComputedStyle(viewNoteText).fontSize);
+        const fontSizeStep = 2; // Pixels to increase/decrease by
+
+        // Functions for dynamic dropdown
+        function populateArticleTypes(coreTone) {
+            const types = toneTypes[coreTone] || [];
+            articleTypeSelect.innerHTML = ''; // Clear current options
+            types.forEach(type => {
+                const option = document.createElement('option');
+                // Use a regular regular expression to remove the emoji and any leading space from the value
+                option.value = type.replace(/^\p{Emoji}\s*/u, '');
+                option.textContent = type; // Keep emoji for display
+                articleTypeSelect.appendChild(option);
+            });
+            // Select the first option by default
+            if (types.length > 0) {
+                articleTypeSelect.value = types[0].replace(/^\p{Emoji}\s*/u, '');
+            }
+        }
+
+        // Initialize types based on the default core tone
+        populateArticleTypes(coreToneSelect.value);
+
+        // Event listener for coreTone change
+        coreToneSelect.addEventListener('change', (event) => {
+            populateArticleTypes(event.target.value);
+        });
+
+        // Function to get the API key (always return empty string for Canvas to inject)
+        function getApiKey() {
+            return "AIzaSyDx1ZjGvvA5N-HGyfqYSX_sbtyb23ZIrjE";
+        }
+
+        // Function to show loading animation on a button
+        function showButtonLoading(buttonId) {
+            const button = document.getElementById(buttonId);
+            const textSpan = button.querySelector('span:not(.button-spinner)');
+            const spinnerSpan = button.querySelector('.button-spinner');
+            if (textSpan) textSpan.classList.add('hidden');
+            if (spinnerSpan) spinnerSpan.classList.remove('hidden');
+            button.disabled = true;
+        }
+
+        // Function to hide loading animation on a button
+        function hideButtonLoading(buttonId) {
+            const button = document.getElementById(buttonId);
+            const textSpan = button.querySelector('span:not(.button-spinner)');
+            const spinnerSpan = button.querySelector('.button-spinner');
+            if (textSpan) textSpan.classList.remove('hidden');
+            if (spinnerSpan) spinnerSpan.classList.add('hidden');
+            button.disabled = false;
+        }
+
+        /**
+         * Converts a subset of Markdown to HTML.
+         * Handles: Headings (#, ##, etc.), Bold (**text**, __text__), Italics (*text*, _text_),
+         * Unordered Lists (*, -), Ordered Lists (1.), Paragraphs, and Line Breaks.
+         * @param {string} markdown - The markdown string to convert.
+         * @returns {string} The HTML string.
+         */
+        function markdownToHtml(markdown) {
+            let html = markdown;
+
+            // 1. Escape HTML characters first to prevent XSS and ensure markdown characters are processed
+            html = html
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+            // Split into lines for block-level processing
+            const lines = html.split('\n');
+            let processedLines = [];
+            let inList = false;
+            let listType = ''; // 'ul' or 'ol'
+
+            for (let i = 0; i < lines.length; i++) {
+                let line = lines[i];
+                const trimmedLine = line.trim();
+
+                // Check for block-level elements (Headings, Lists)
+                const h6Match = trimmedLine.match(/^###### (.*)/);
+                const h5Match = trimmedLine.match(/^##### (.*)/);
+                const h4Match = trimmedLine.match(/^#### (.*)/);
+                const h3Match = trimmedLine.match(/^### (.*)/);
+                const h2Match = trimmedLine.match(/^## (.*)/);
+                const h1Match = trimmedLine.match(/^# (.*)/);
+
+                const ulMatch = trimmedLine.match(/^[*-] (.*)/);
+                const olMatch = trimmedLine.match(/^(\d+\.) (.*)/);
+
+                if (h1Match) {
+                    if (inList) { processedLines.push(`</${listType}>`); inList = false; }
+                    processedLines.push(`<h1>${h1Match[1]}</h1>`);
+                } else if (h2Match) {
+                    if (inList) { processedLines.push(`</${listType}>`); inList = false; }
+                    processedLines.push(`<h2>${h2Match[1]}</h2>`);
+                } else if (h3Match) {
+                    if (inList) { processedLines.push(`</${listType}>`); inList = false; }
+                    processedLines.push(`<h3>${h3Match[1]}</h3>`);
+                } else if (h4Match) {
+                    if (inList) { processedLines.push(`</${listType}>`); inList = false; }
+                    processedLines.push(`<h4>${h4Match[1]}</h4>`);
+                } else if (h5Match) {
+                    if (inList) { processedLines.push(`</${listType}>`); inList = false; }
+                    processedLines.push(`<h5>${h5Match[1]}</h5>`);
+                } else if (h6Match) {
+                    if (inList) { processedLines.push(`</${listType}>`); inList = false; }
+                    processedLines.push(`<h6>${h6Match[1]}</h6>`);
+                } else if (ulMatch) {
+                    if (!inList || listType !== 'ul') {
+                        if (inList) processedLines.push(`</${listType}>`);
+                        processedLines.push('<ul>');
+                        inList = true;
+                        listType = 'ul';
+                    }
+                    processedLines.push(`<li>${ulMatch[1]}</li>`);
+                } else if (olMatch) {
+                    if (!inList || listType !== 'ol') {
+                        if (inList) processedLines.push(`</${listType}>`);
+                        processedLines.push('<ol>');
+                        inList = true;
+                        listType = 'ol';
+                    }
+                    processedLines.push(`<li>${olMatch[2]}</li>`);
+                } else {
+                    // End current list if any
+                    if (inList) {
+                        processedLines.push(`</${listType}>`);
+                        inList = false;
+                    }
+                    // Add the line as is for now; paragraph handling comes next
+                    processedLines.push(line);
+                }
+            }
+
+            // Close any open list at the end of the document
+            if (inList) {
+                processedLines.push(`</${listType}>`);
+            }
+
+            // Join lines back to process paragraphs and inline elements
+            html = processedLines.join('\n');
+
+            // Inline elements: Bold and Italics (apply after block-level structure)
+            html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); // **bold**
+            html = html.replace(/__(.*?)__/g, '<strong>$1</strong>');     // __bold__
+            html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');           // *italic*
+            html = html.replace(/_(.*?)_/g, '<em>$1</em>');             // _italic_
+
+            // Paragraphs and Line Breaks:
+            // Split by double newlines to identify distinct paragraphs.
+            // Then process each paragraph for single newlines.
+            const paragraphBlocks = html.split(/\n\n+/); // Split by one or more blank lines
+            let finalHtmlBlocks = [];
+
+            for (let block of paragraphBlocks) {
+                if (block.trim() === '') continue; // Skip empty blocks
+
+                // Check if the block already starts with a known HTML block tag (h1-h6, ul, ol, li)
+                // This prevents wrapping already formatted block elements in <p> tags.
+                if (block.match(/^\s*<\/?(h[1-6]|ul|ol|li|strong|em)>/i)) {
+                    finalHtmlBlocks.push(block);
+                } else {
+                    // Replace single newlines within the paragraph block with <br>
+                    const pContent = block.replace(/\n/g, '<br>');
+                    finalHtmlBlocks.push(`<p>${pContent}</p>`);
+                }
+            }
+
+            html = finalHtmlBlocks.join('\n');
+
+            // Remove any empty paragraph tags that might have been created by mistake
+            html = html.replace(/<p><\/p>/g, '');
+            html = html.replace(/<p><br><\/p>/g, '');
+
+            return html;
+        }
+
+        // Function to generate improved article title using Gemini API
+        async function generateImprovedTitle() {
+            const topic = topicInput.value;
+            const format = formatSelect.value;
+            const coreTone = coreToneSelect.value;
+            const articleType = articleTypeSelect.value;
+            const selectedModel = 'gemini-2.0-flash';
+            const apiKey = getApiKey();
+
+            if (!topic) {
+                improvedArticleTitle.textContent = 'Enter a topic to generate title.';
+                return;
+            }
+
+            let prompt = `Generate a concise and engaging title for a ${format} about "${topic}". The core tone should be ${coreTone}. The writing style should be ${articleType}. Respond with only the title words, no extra text or punctuation.`;
+            improvedArticleTitle.textContent = 'Generating title...';
+            showButtonLoading('regenerateTitleBtn');
+
+            try {
+                let chatHistory = [];
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                const payload = { contents: chatHistory };
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${selectedModel}:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const titleText = result.candidates[0].content.parts[0].text.trim();
+                    improvedArticleTitle.textContent = titleText;
+                } else {
+                    improvedArticleTitle.textContent = 'Failed to generate title.';
+                    console.error('Gemini API response error for title:', result);
+                }
+            } catch (error) {
+                improvedArticleTitle.textContent = 'Error generating title.';
+                console.error('Error calling Gemini API for title:', error);
+            } finally {
+                hideButtonLoading('regenerateTitleBtn');
+            }
+        }
+
+        // Function to generate article content using Gemini API
+        async function generateArticle() {
+            const topic = topicInput.value;
+            const format = formatSelect.value;
+            const coreTone = coreToneSelect.value;
+            const articleType = articleTypeSelect.value;
+            const words = wordsInput.value;
+            const language = languageSelect.value;
+            const hashtags = hashtagsCheckbox.checked;
+            const emoji = emojiCheckbox.checked;
+            const knowledgeLevel = knowledgeLevelSelect.value;
+            const englishTerms = englishTermsCheckbox.checked;
+            const additionalPrompt = additionalPromptTextarea.value.trim();
+
+            const selectedModel = 'gemini-2.0-flash';
+            const apiKey = getApiKey();
+
+            let prompt = `Generate a ${format} about "${topic || 'a general topic'}" in ${language} language.`;
+            prompt += ` The core tone should be ${coreTone}. The writing style should be ${articleType}. Aim for approximately ${words} words.`;
+            prompt += ` Use Markdown for formatting (e.g., **bold**, *italics*, # headings, - lists).`; // Explicitly request Markdown
+
+            if (knowledgeLevel === 'Children (6-12)') {
+                prompt += ` The content should be very easy to understand, using simple vocabulary and explanations, and focusing on ground-level information.`;
+            } else if (knowledgeLevel === 'Teenagers (13-18)') {
+                prompt += ` The content should be engaging and accessible for teenagers, providing clear explanations without being overly simplistic or overly academic.`;
+            } else if (knowledgeLevel === 'Young Adults (19-30)') {
+                prompt += ` The content should be informative and engaging for young adults, assuming a moderate level of general knowledge and providing a good balance of detail.`;
+            } else if (knowledgeLevel === 'Adults (30-60)') {
+                prompt += ` The content should be comprehensive and insightful for adults, assuming a foundational understanding of basic concepts and delving into more nuanced details.`;
+            } else if (knowledgeLevel === 'Seniors (60+)') {
+                prompt += ` The content should be clear, concise, and respectful, avoiding overly complex jargon and focusing on practical or relevant aspects for seniors.`;
+            } else if (knowledgeLevel === 'General Audience') {
+                prompt += ` The content should be broadly accessible and informative for a general audience, providing enough detail to be interesting without requiring specialized prior knowledge.`;
+            }
+
+            if (englishTerms) {
+                prompt += ` All technical terms should be in English, regardless of the article's main language.`;
+            }
+
+            if (hashtags) {
+                prompt += ` Include relevant hashtags.`;
+            }
+            if (emoji) {
+                prompt += ` Include relevant emojis.`;
+            }
+
+            if (additionalPrompt) {
+                prompt += ` Additional instructions: ${additionalPrompt}.`;
+            }
+
+            articleContent.value = ''; // Clear content before generating
+            articleLoadingOverlay.classList.add('show'); // Show loading overlay
+            showButtonLoading('regenerateArticleBtn'); // Show loading on regenerate article button
+
+            try {
+                let chatHistory = [];
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                const payload = { contents: chatHistory };
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${selectedModel}:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    // Add 10 blank lines for extra scrolling
+                    articleContent.value = text + '\n\n\n\n\n\n\n\n\n\n';
+                    openArticleModal(); // Open modal after generation
+                } else {
+                    articleContent.value = 'Failed to generate article. Please try again.';
+                    console.error('Gemini API response error:', result);
+                }
+            } catch (error) {
+                articleContent.value = 'Error generating article. Please check your network connection or try again later.';
+                console.error('Error calling Gemini API:', error);
+            } finally {
+                articleLoadingOverlay.classList.remove('show'); // Hide loading overlay
+                hideButtonLoading('regenerateArticleBtn'); // Hide loading on regenerate article button
+            }
+        }
+
+        // Function to show toast messages
+        function showMessage(message, type = 'info') {
+            const container = document.getElementById('messageContainer');
+            const messageBox = document.createElement('div');
+            messageBox.classList.add('message-box', type);
+            messageBox.textContent = message;
+            container.appendChild(messageBox);
+
+            // Trigger reflow to enable transition
+            void messageBox.offsetWidth;
+            messageBox.classList.add('show');
+
+            setTimeout(() => {
+                messageBox.classList.remove('show');
+                messageBox.addEventListener('transitionend', () => {
+                    messageBox.remove();
+                }, { once: true });
+            }, 3000); // Message disappears after 3 seconds
+        }
+
+        // Add event listeners
+        if (mainGenerateBtn) {
+            mainGenerateBtn.addEventListener('click', async () => {
+                showButtonLoading('mainGenerateBtn'); // Show loading on main generate button
+                try {
+                    await generateImprovedTitle(); // Generate title first
+                    await generateArticle();
+                } finally {
+                    hideButtonLoading('mainGenerateBtn'); // Hide loading on main generate button
+                }
+            });
+        }
+
+        // Surprise Me! button event listener
+        if (surpriseMeBtn) {
+            surpriseMeBtn.addEventListener('click', async () => {
+                const currentFormat = formatSelect.value;
+                const currentCoreTone = coreToneSelect.value;
+                const currentArticleType = articleTypeSelect.value;
+                const currentLanguage = languageSelect.value;
+                const currentKnowledgeLevel = knowledgeLevelSelect.value;
+
+                let prompt = `Generate a random topic for a ${currentFormat} with a ${currentCoreTone} core tone and ${currentArticleType} style, in ${currentLanguage} language, suitable for a ${currentKnowledgeLevel} audience. Respond with only the topic words, no extra text or punctuation.`;
+                const selectedModel = 'gemini-2.0-flash'; // Default model
+                const apiKey = getApiKey();
+
+                showButtonLoading('surpriseMeBtn'); // Show loading on surprise button
+
+                try {
+                    let chatHistory = [];
+                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                    const payload = { contents: chatHistory };
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${selectedModel}:generateContent?key=${apiKey}`;
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const result = await response.json();
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const generatedTopic = result.candidates[0].content.parts[0].text.trim();
+                        topicInput.value = generatedTopic;
+                    } else {
+                        console.error('Gemini API response error for surprise topic:', result);
+                        showMessage('Failed to generate a surprise topic. Please try again.', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error calling Gemini API:', error);
+                    showMessage('Error generating surprise topic. Please check your network.', 'error');
+                } finally {
+                    hideButtonLoading('surpriseMeBtn'); // Hide loading on surprise button
+                }
+            });
+        }
+
+        if (copyArticleBtn) {
+            copyArticleBtn.addEventListener('click', () => {
+                articleContent.select();
+                articleContent.setSelectionRange(0, 99999); // For mobile devices
+
+                try {
+                    document.execCommand('copy');
+                    showMessage('Article copied to clipboard!', 'success');
+                } catch (err) {
+                    console.error('Failed to copy article content.', err);
+                    showMessage('Failed to copy article. Please try manually.', 'error');
+                }
+            });
+        }
+
+        if (regenerateArticleBtn) {
+            regenerateArticleBtn.addEventListener('click', generateArticle);
+        }
+
+        if (regenerateTitleBtn) {
+            regenerateTitleBtn.addEventListener('click', generateImprovedTitle);
+        }
+
+        // Global variable to hold the speech utterance
+        let currentUtterance = null;
+        let availableVoices = [];
+
+        // Function to update available voices
+        function updateVoices() {
+            availableVoices = speechSynthesis.getVoices();
+            console.log("Available voices:", availableVoices);
+        }
+
+        // Listen for voices being loaded
+        speechSynthesis.onvoiceschanged = updateVoices;
+
+        // Call once initially in case voices are already loaded
+        updateVoices();
+
+        // Helper to map app language to speech synthesis language codes and find a suitable voice
+        function getSuitableVoice(appLang) {
+            const langMap = {
+                'English': 'en-US',
+                'Burmese': 'my-MM',
+                'Spanish': 'es-ES',
+            };
+            const targetLangCode = langMap[appLang] || 'en-US'; // Default to en-US
+
+            // Try to find an exact match first
+            let voice = availableVoices.find(v => v.lang === targetLangCode);
+
+            // If exact match not found for Burmese, try a broader match (e.g., 'my' if 'my-MM' isn't specific)
+            if (!voice && appLang === 'Burmese') {
+                voice = availableVoices.find(v => v.lang.startsWith('my'));
+            }
+
+            // If still no voice, fall back to a generic English voice if available
+            if (!voice) {
+                console.warn(`No specific voice found for ${appLang} (${targetLangCode}). Falling back to default English voice.`);
+                voice = availableVoices.find(v => v.lang.startsWith('en')) || null; // Find any English voice
+            } else {
+                console.log(`Using voice: ${voice.name} (${voice.lang}) for ${appLang}`);
+            }
+            return voice;
+        }
+
+        // Function to toggle speech play/pause
+        function toggleSpeech(targetTextElementId, playIconId, pauseIconId) {
+            // For speech, always use the raw text content, not the HTML
+            const textToSpeak = document.getElementById(targetTextElementId).textContent.trim();
+            const playIcon = document.getElementById(playIconId);
+            const pauseIcon = document.getElementById(pauseIconId);
+
+            if (!textToSpeak) {
+                showMessage('No text to read aloud.', 'info');
+                return;
+            }
+
+            if (speechSynthesis.speaking && !speechSynthesis.paused && currentUtterance && currentUtterance.text === textToSpeak) {
+                console.log("Speech: Pausing current utterance.");
+                speechSynthesis.pause();
+                playIcon.classList.remove('hidden');
+                pauseIcon.classList.add('hidden');
+            } else if (speechSynthesis.paused && currentUtterance && currentUtterance.text === textToSpeak) {
+                console.log("Speech: Resuming paused utterance.");
+                speechSynthesis.resume();
+                playIcon.classList.add('hidden');
+                pauseIcon.classList.remove('hidden');
+            } else {
+                // Not speaking or speaking different text, start new speech
+                const selectedAppLanguage = languageSelect.value;
+                const voiceToUse = getSuitableVoice(selectedAppLanguage);
+
+                if (!voiceToUse) {
+                    console.error(`Cannot read article: No suitable voice found for ${selectedAppLanguage}.`);
+                    showMessage(`Speech not available for ${selectedAppLanguage}. Try English.`, 'error');
+                    return;
+                }
+
+                // Cancel any previous speech
+                speechSynthesis.cancel();
+
+                currentUtterance = new SpeechSynthesisUtterance(textToSpeak);
+                currentUtterance.voice = voiceToUse; // Assign the found voice object
+                currentUtterance.lang = voiceToUse.lang; // Ensure lang matches the voice
+
+                currentUtterance.onend = () => {
+                    console.log("Speech: Utterance ended.");
+                    playIcon.classList.remove('hidden');
+                    pauseIcon.classList.add('hidden');
+                };
+
+                currentUtterance.onerror = (event) => {
+                    console.error('SpeechSynthesisUtterance error details:', event);
+                    playIcon.classList.remove('hidden');
+                    pauseIcon.classList.add('hidden');
+                    showMessage('Error during speech playback.', 'error');
+                };
+
+                console.log("Speech: Attempting to speak new utterance.");
+                // A small delay to ensure browser is ready for speech, sometimes helps with finicky APIs
+                setTimeout(() => {
+                    speechSynthesis.speak(currentUtterance);
+                    playIcon.classList.add('hidden');
+                    pauseIcon.classList.remove('hidden');
+                }, 50); // 50ms delay
+            }
+        }
+
+
+        // Function to open the modal without starting speech
+        function openArticleModal() {
+            const rawContent = articleContent.value.trim();
+            if (rawContent === '') {
+                showMessage('Generate an article first to read it.', 'info');
+                return;
+            }
+            modalArticleTitle.textContent = improvedArticleTitle.textContent;
+
+            // Always render HTML using markdownToHtml
+            modalArticleText.innerHTML = markdownToHtml(rawContent);
+
+            articleModal.classList.add('show');
+            modalArticleText.style.fontSize = '1.25rem';
+            currentFontSize = parseFloat(window.getComputedStyle(modalArticleText).fontSize);
+
+            // Ensure play/pause icons are reset if speech is not active
+            if (!speechSynthesis.speaking && !speechSynthesis.paused) {
+                playIcon.classList.remove('hidden');
+                pauseIcon.classList.add('hidden');
+            }
+        }
+
+        // Event listener for the "Read" button (now explicitly calls toggleSpeech)
+        if (readArticleBtn) {
+            readArticleBtn.addEventListener('click', () => {
+                openArticleModal(); // Open the modal first
+                toggleSpeech('modalArticleText', 'playIcon', 'pauseIcon');     // Then start speech
+            });
+        }
+
+        // Event listener for the modal close button
+        if (modalCloseBtn) {
+            modalCloseBtn.addEventListener('click', () => {
+                articleModal.classList.remove('show');
+                if (speechSynthesis.speaking || speechSynthesis.paused) {
+                    speechSynthesis.cancel();
+                    playIcon.classList.remove('hidden');
+                    pauseIcon.classList.add('hidden');
+                }
+                hideWordMeaningPopup(); // Hide popup when modal closes
+            });
+        }
+
+        // Event listener for play/pause button
+        if (playPauseArticleBtn) {
+            playPauseArticleBtn.addEventListener('click', () => toggleSpeech('modalArticleText', 'playIcon', 'pauseIcon'));
+        }
+
+        // Font size adjustment functions
+        if (decreaseFontSizeBtn) {
+            decreaseFontSizeBtn.addEventListener('click', () => {
+                currentFontSize = Math.max(12, currentFontSize - fontSizeStep); // Minimum font size 12px
+                modalArticleText.style.fontSize = `${currentFontSize}px`;
+            });
+        }
+
+        if (increaseFontSizeBtn) {
+            increaseFontSizeBtn.addEventListener('click', () => {
+                currentFontSize = Math.min(40, currentFontSize + fontSizeStep); // Maximum font size 40px
+                modalArticleText.style.fontSize = `${currentFontSize}px`;
+            });
+        }
+
+        // Word Meaning Pop-up Logic
+        let meaningFetchController = null; // To abort previous fetch requests
+
+        function hideWordMeaningPopup() {
+            wordMeaningPopup.classList.remove('show');
+            wordMeaningPopup.textContent = '';
+            if (meaningFetchController) {
+                meaningFetchController.abort();
+                meaningFetchController = null;
+            }
+        }
+
+        // Function to get meaning of selected text using Gemini API
+        async function getWordMeaning(word) {
+            const selectedModel = 'gemini-2.0-flash';
+            const apiKey = getApiKey();
+            // Default prompt for word meaning
+            let prompt = `Provide a concise meaning for the word/phrase "${word}" in Burmese language, approximately 20 words.`;
+
+            wordMeaningPopup.textContent = 'Loading meaning...';
+            meaningFetchController = new AbortController();
+            const signal = meaningFetchController.signal;
+
+            try {
+                let chatHistory = [];
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                const payload = { contents: chatHistory };
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${selectedModel}:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                    signal: signal
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const meaningText = result.candidates[0].content.parts[0].text.trim();
+                    wordMeaningPopup.textContent = meaningText;
+                } else {
+                    wordMeaningPopup.textContent = 'Meaning not found.';
+                    console.error('Gemini API response error for meaning:', result);
+                }
+            } catch (error) {
+                if (error.name === 'AbortError') {
+                    console.log('Meaning fetch aborted.');
+                } else {
+                    wordMeaningPopup.textContent = 'Error fetching meaning.';
+                    console.error('Error calling Gemini API for meaning:', error);
+                }
+            } finally {
+                meaningFetchController = null;
+            }
+        }
+
+        // Event listener for mouseup on modalArticleText to detect selection
+        if (modalArticleText) {
+            modalArticleText.addEventListener('mouseup', (event) => {
+                const selection = window.getSelection();
+                const selectedText = selection.toString().trim();
+
+                // Check if text is selected and it's within the modalArticleText element
+                if (selectedText.length > 0 && modalArticleText.contains(selection.anchorNode)) {
+                    // Basic validation: ensure it's not too long (e.g., a whole paragraph)
+                    const words = selectedText.split(/\s+/).filter(word => word.length > 0);
+                    if (words.length > 5) { // Limit to 5 words for a definition
+                        hideWordMeaningPopup();
+                        return;
+                    }
+
+                    const range = selection.getRangeAt(0);
+                    const rect = range.getBoundingClientRect();
+                    const modalRect = articleModal.getBoundingClientRect(); // Get modal's position
+
+                    // Calculate position relative to the modal
+                    let popupX = rect.left - modalRect.left + (rect.width / 2);
+                    let popupY = rect.top - modalRect.top - wordMeaningPopup.offsetHeight - 10; // 10px above selection
+
+                    // Adjust for horizontal overflow
+                    if (popupX + wordMeaningPopup.offsetWidth / 2 > modalRect.width) {
+                        popupX = modalRect.width - wordMeaningPopup.offsetWidth;
+                    }
+                    if (popupX - wordMeaningPopup.offsetWidth / 2 < 0) {
+                        popupX = 0;
+                    }
+
+                    wordMeaningPopup.style.left = `${popupX}px`;
+                    wordMeaningPopup.style.top = `${popupY}px`;
+                    wordMeaningPopup.classList.add('show');
+
+                    getWordMeaning(selectedText);
+                } else {
+                    hideWordMeaningPopup();
+                }
+            });
+
+            // Hide popup if user clicks outside the selection area but within the modal
+            articleModal.addEventListener('click', (event) => {
+                if (!wordMeaningPopup.contains(event.target) && !modalArticleText.contains(event.target)) {
+                    hideWordMeaningPopup();
+                }
+            });
+        }
+
+        // Saved Notes Functionality
+        function getSavedNotes() {
+            const notes = localStorage.getItem('savedNotes');
+            return notes ? JSON.parse(notes) : [];
+        }
+
+        function saveNotesToLocalStorage(notes) {
+            localStorage.setItem('savedNotes', JSON.stringify(notes));
+        }
+
+        function saveCurrentNote() {
+            const title = improvedArticleTitle.textContent.trim();
+            const content = articleContent.value.trim(); // Save raw markdown content
+
+            if (!title || title === 'Article Title' || !content) {
+                showMessage('Please generate an article and title first to save it.', 'info');
+                return;
+            }
+
+            const notes = getSavedNotes();
+            const newNote = {
+                id: Date.now(), // Unique ID for the note
+                title: title,
+                content: content, // Save the raw markdown content
+                savedAt: new Date().toLocaleString()
+            };
+            notes.unshift(newNote); // Add to the beginning
+            saveNotesToLocalStorage(notes);
+            showMessage('Article saved to notes!', 'success');
+        }
+
+        function deleteNote(id) {
+            let notes = getSavedNotes();
+            notes = notes.filter(note => note.id !== id);
+            saveNotesToLocalStorage(notes);
+            renderSavedNotes(); // Re-render the list after deletion
+            showMessage('Note deleted.', 'info');
+        }
+
+        function renderSavedNotes() {
+            const notes = getSavedNotes();
+            savedNotesList.innerHTML = ''; // Clear current list
+
+            if (notes.length === 0) {
+                const li = document.createElement('li');
+                li.textContent = 'No notes saved yet.';
+                li.classList.add('justify-center', 'text-gray-400', 'py-4');
+                savedNotesList.appendChild(li);
+                return;
+            }
+
+            notes.forEach(note => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span>${note.title} <br> <span class="text-xs text-gray-400">${note.savedAt}</span></span>
+                    <div>
+                        <button data-id="${note.id}" class="view-note-btn">View</button>
+                        <button data-id="${note.id}" class="delete-btn">Delete</button>
+                    </div>
+                `;
+                savedNotesList.appendChild(li);
+            });
+
+            // Add event listeners for view and delete buttons on newly rendered notes
+            savedNotesList.querySelectorAll('.view-note-btn').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const noteId = parseInt(event.target.dataset.id);
+                    const noteToView = notes.find(note => note.id === noteId);
+                    if (noteToView) {
+                        displaySingleNote(noteToView);
+                    }
+                });
+            });
+
+            savedNotesList.querySelectorAll('.delete-btn').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const noteId = parseInt(event.target.dataset.id);
+                    deleteNote(noteId);
+                });
+            });
+        }
+
+        function displaySingleNote(note) {
+            viewNoteTitle.textContent = note.title;
+
+            // Always render HTML using markdownToHtml for view note modal
+            viewNoteText.innerHTML = markdownToHtml(note.content);
+
+            viewNoteModal.classList.add('show');
+            viewNoteText.style.fontSize = '1.25rem'; // Reset font size for consistency
+            viewNoteCurrentFontSize = parseFloat(window.getComputedStyle(viewNoteText).fontSize);
+
+            // Reset play/pause icons for the view note modal
+            if (speechSynthesis.speaking || speechSynthesis.paused) {
+                speechSynthesis.cancel();
+            }
+            viewNotePlayIcon.classList.remove('hidden');
+            viewNotePauseIcon.classList.add('hidden');
+        }
+
+        // Event Listeners for new buttons
+        if (saveNoteBtn) {
+            saveNoteBtn.addEventListener('click', saveCurrentNote);
+        }
+
+        if (viewSavedNotesBtn) {
+            viewSavedNotesBtn.addEventListener('click', () => {
+                renderSavedNotes();
+                savedNotesModal.classList.add('show');
+            });
+        }
+
+        if (savedNotesCloseBtn) {
+            savedNotesCloseBtn.addEventListener('click', () => {
+                savedNotesModal.classList.remove('show');
+            });
+        }
+
+        if (viewNoteCloseBtn) {
+            viewNoteCloseBtn.addEventListener('click', () => {
+                viewNoteModal.classList.remove('show');
+                if (speechSynthesis.speaking || speechSynthesis.paused) {
+                    speechSynthesis.cancel();
+                }
+            });
+        }
+
+        // Font size adjustment for View Note Modal
+        if (viewNoteDecreaseFontSize) {
+            viewNoteDecreaseFontSize.addEventListener('click', () => {
+                viewNoteCurrentFontSize = Math.max(12, viewNoteCurrentFontSize - fontSizeStep);
+                viewNoteText.style.fontSize = `${viewNoteCurrentFontSize}px`;
+            });
+        }
+
+        if (viewNoteIncreaseFontSize) {
+            viewNoteIncreaseFontSize.addEventListener('click', () => {
+                viewNoteCurrentFontSize = Math.min(40, viewNoteCurrentFontSize + fontSizeStep);
+                viewNoteText.style.fontSize = `${viewNoteCurrentFontSize}px`;
+            });
+        }
+
+        // Play/Pause for View Note Modal
+        if (viewNotePlayPauseBtn) {
+            viewNotePlayPauseBtn.addEventListener('click', () => toggleSpeech('viewNoteText', 'viewNotePlayIcon', 'viewNotePauseIcon'));
+        }
+
+        // Populate format dropdown on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const formatSelectElement = document.getElementById('format');
+            formatSelectElement.innerHTML = ''; // Clear existing options
+            formatsList.forEach(format => {
+                const option = document.createElement('option');
+                option.value = format;
+                option.textContent = format;
+                formatSelectElement.appendChild(option);
+            });
+            // Set default selected option if needed
+            formatSelectElement.value = "Essay";
+        });
+    </script>
 </body>
 </html>
