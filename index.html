@@ -399,7 +399,7 @@
             visibility: visible;
         }
 
-        .saved-notes-content, .view-note-content {
+        .saved-notes-content { /* Specific content styling for saved notes list modal */
             background-color: #2d3748; /* Dark background */
             color: #e2e8f0; /* Light text */
             padding: 1.5rem;
@@ -413,7 +413,7 @@
             flex-direction: column;
         }
 
-        .saved-notes-content h2, .view-note-content h2 {
+        .saved-notes-content h2 {
             font-size: 1.75rem;
             font-weight: bold;
             margin-bottom: 1rem;
@@ -491,34 +491,41 @@
             background-color: rgba(255, 255, 255, 0.4);
         }
 
-        .view-note-content .font-size-controls {
-            padding: 0.5rem 0;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid #4a5568;
-        }
+        /* Removed specific overrides for view-note-content children to ensure consistency */
+        /* .view-note-content .font-size-controls { ... } */
+        /* .view-note-content .modal-article-title { ... } */
+        /* .view-note-content .modal-article-text { ... } */
 
-        .view-note-content .modal-article-title {
-            font-size: 1.75rem;
-            margin-bottom: 0.75rem;
-            padding: 0; /* Remove padding from this specific title */
-        }
-
-        .view-note-content .modal-article-text {
-            flex-grow: 1;
-            overflow-y: auto;
-            padding: 0; /* Remove padding from this specific text */
-        }
         /* Smaller buttons for main actions */
         .main-action-button {
             padding: 0.5rem 1rem; /* Smaller padding */
             font-size: 0.875rem; /* Smaller font size */
             width: auto; /* Let content dictate width */
+            display: flex; /* Use flexbox for centering icon and text */
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem; /* Space between icon and text */
         }
-        /* Smaller width for article action buttons */
+        .main-action-button svg {
+            width: 1.25em; /* Icon size relative to font-size */
+            height: 1.25em;
+        }
+
+        /* Responsive width for article action buttons */
         .article-action-button {
-            width: 8rem; /* Smaller fixed width */
-            padding: 0.5rem 1rem; /* Smaller padding */
+            padding: 0.5rem 0.75rem; /* Adjusted padding for icons */
             font-size: 0.875rem; /* Smaller font size */
+            flex-grow: 1; /* Allow buttons to grow and fill available space */
+            min-width: 4rem; /* Adjusted min-width for icons */
+            max-width: 8rem; /* Adjusted max-width for icons */
+            display: flex; /* Use flexbox for centering icon */
+            align-items: center; /* Center icon vertically */
+            justify-content: center; /* Center icon horizontally */
+            gap: 0.25rem; /* Small gap between icon and text if text were present */
+        }
+        .article-action-button svg {
+            width: 1.25em; /* Icon size relative to font-size */
+            height: 1.25em;
         }
     </style>
 </head>
@@ -536,10 +543,21 @@
         <div class="mt-8 mb-8 px-4 flex flex-row flex-wrap items-center justify-center gap-4">
             <textarea id="topicInput" rows="1" placeholder="Enter article topic (e.g., 'The history of AI', 'Benefits of meditation')" class="flex-grow min-w-[100px] px-4 py-3 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-200 placeholder-gray-400 bg-gray-700 resize-y"></textarea>
             <button id="mainGenerateBtn" class="bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 shadow-md flex-shrink-0 main-action-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles">
+                    <path d="M10.5 17.5L8 20l-2.5-2.5L3 15.5l2.5-2.5L8 10l2.5 2.5L13 15.5l-2.5 2.5z"/>
+                    <path d="M19 12l2 2l-2 2l-2-2l2-2z"/>
+                    <path d="M10 4l2 2l-2 2l-2-2l2-2z"/>
+                </svg>
                 <span id="generateBtnText">Generate</span>
                 <span id="generateBtnSpinner" class="button-spinner hidden"></span>
             </button>
             <button id="surpriseMeBtn" class="bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition duration-300 shadow-md flex-shrink-0 main-action-button" title="Generates a random topic and article based on general settings.">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-dice">
+                    <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
+                    <path d="M7.5 15.5h.01"/>
+                    <path d="M12 12h.01"/>
+                    <path d="M16.5 8.5h.01"/>
+                </svg>
                 <span id="surpriseMeBtnText">Surprise</span>
                 <span id="surpriseMeBtnSpinner" class="button-spinner hidden"></span>
             </button>
@@ -704,15 +722,30 @@
                     </div>
                 </div>
                 <div class="flex flex-row justify-center mt-6 gap-4">
-                    <button id="copyArticleBtn" class="bg-gray-600 text-gray-200 rounded-lg hover:bg-gray-500 transition duration-300 shadow-sm article-action-button">Copy</button>
-                    <button id="saveNoteBtn" class="bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-300 shadow-md article-action-button">Save</button>
-                    <button id="regenerateArticleBtn" class="bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 shadow-md article-action-button">
-                        <span id="regenerateArticleBtnText">Regenerate</span>
+                    <button id="copyArticleBtn" class="bg-gray-600 text-gray-200 rounded-lg hover:bg-gray-500 transition duration-300 shadow-sm article-action-button" title="Copy Article">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clipboard">
+                            <rect width="8" height="4" x="8" y="2" rx="1" ry="1"/>
+                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                        </svg>
+                    </button>
+                    <button id="saveNoteBtn" class="bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-300 shadow-md article-action-button" title="Save Note">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-save">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                            <polyline points="17 21 17 13 7 13 7 21"/>
+                            <polyline points="7 3 7 8 15 8"/>
+                        </svg>
+                    </button>
+                    <button id="regenerateArticleBtn" class="bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 shadow-md article-action-button" title="Regenerate Article">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-refresh-cw">
+                            <path d="M21 12a9 9 0 0 0-9-9c-2.52 0-4.93 1-6.71 2.71L3 8"/>
+                            <path d="M3 3v5h5"/>
+                            <path d="M3 12a9 9 0 0 0 9 9c2.52 0 4.93-1 6.71-2.71L21 16"/>
+                            <path d="M21 21v-5h-5"/>
+                        </svg>
                         <span id="regenerateArticleBtnSpinner" class="button-spinner hidden"></span>
                     </button>
-                    <button id="readArticleBtn" class="bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-300 shadow-md flex items-center justify-center article-action-button">
-                        Read
-                        <svg class="ml-2 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9.383 3.017a1 1 0 01.277 1.015l-1.5 5a1 1 0 01-1.292.544l-3.374-1.012a1 1 0 01-.544-1.292l1.5-5a1 1 0 011.015-.277l3.374 1.012zM15 11a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1zM6 15a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1zM11 15a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
+                    <button id="readArticleBtn" class="bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-300 shadow-md article-action-button" title="Read Article">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9.383 3.017a1 1 0 01.277 1.015l-1.5 5a1 1 0 01-1.292.544l-3.374-1.012a1 1 0 01-.544-1.292l1.5-5a1 1 0 011.015-.277l3.374 1.012zM15 11a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1zM6 15a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1zM11 15a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
                     </button>
                 </div>
             </div>
@@ -754,9 +787,7 @@
     </div>
 
     <div id="viewNoteModal" class="view-note-modal">
-        <div class="view-note-content">
-            <button id="viewNoteCloseBtn" class="modal-close-btn-top-right">&times;</button>
-            <div class="font-size-controls">
+        <div class="modal-content-wrapper"> <div class="font-size-controls">
                 <div class="font-size-group">
                     <button id="viewNoteDecreaseFontSize" class="font-size-button">-</button>
                     <button id="viewNoteIncreaseFontSize" class="font-size-button">+</button>
@@ -765,9 +796,10 @@
                     <span id="viewNotePlayIcon">▶</span>
                     <span id="viewNotePauseIcon" class="hidden">⏸</span>
                 </button>
+                <button id="viewNoteCloseBtn" class="modal-close-btn">&times;</button> </div>
+            <div id="viewNoteContentScroll" class="modal-article-content-scroll"> <h2 id="viewNoteTitle" class="modal-article-title"></h2>
+                <div id="viewNoteText" class="modal-article-text"></div>
             </div>
-            <h2 id="viewNoteTitle" class="modal-article-title"></h2>
-            <div id="viewNoteText" class="modal-article-text"></div>
         </div>
     </div>
 
@@ -809,7 +841,7 @@
             "Emotional": [
                 "🫂 Empathetic", "❤️‍🔥 Passionate", "💔 Vulnerable", "😔 Sympathetic", " ❤️ Compassionate",
                 " 📸 Sentimental", " ☔ Melancholy", " 😬 Anxious",
-                " 😨 Fearful", " ✨ Hopeful", " 🎭 Dramatic"
+                " 😨 fearful", " ✨ Hopeful", " 🎭 Dramatic"
             ],
             "Humorous": [
                 "🧠 Witty", "😏 Sarcastic", " 😈 Playful", " 🙃 Ironic",
@@ -846,7 +878,6 @@
         const languageSelect = document.getElementById('language');
         const hashtagsCheckbox = document.getElementById('hashtags');
         const emojiCheckbox = document.getElementById('emoji');
-        // const plainTextFormatCheckbox = document.getElementById('plainTextFormat'); // Removed
         const knowledgeLevelSelect = document.getElementById('knowledgeLevel');
         const englishTermsCheckbox = document.getElementById('englishTerms');
         const additionalPromptTextarea = document.getElementById('additional-prompt');
@@ -1744,8 +1775,6 @@
         if (viewNotePlayPauseBtn) {
             viewNotePlayPauseBtn.addEventListener('click', () => toggleSpeech('viewNoteText', 'viewNotePlayIcon', 'viewNotePauseIcon'));
         }
-
-        // Removed the event listener for plainTextFormat checkbox as it's no longer needed.
 
         // Populate format dropdown on load
         document.addEventListener('DOMContentLoaded', () => {
