@@ -126,13 +126,6 @@
             background-color: #374151; /* hover:bg-gray-700 */
         }
 
-        .accordion-header h2 {
-            font-size: 1.5rem; /* text-2xl */
-            font-weight: 700; /* font-bold */
-            color: #60a5fa; /* text-blue-400 */
-            margin: 0; /* Override default margin */
-        }
-
         .accordion-icon {
             font-size: 1.5rem;
             color: #9ca3af; /* text-gray-400 */
@@ -410,7 +403,7 @@
               "Faraday's Law", "Lenz's Law", "Maxwell's Equations", "Electromagnetic Waves",
               "Light", "Photon", "Refraction of Light", "Reflection of Light", "Diffraction of Light",
               "Interference of Light", "Polarization", "Electrons", "Protons", "Neutrons",
-              "Conductors", "Insulators", "Semiconductors", "Alternating Current (AC)",
+              "Conductors", "Insulators", "E=mc²", "Alternating Current (AC)",
               "Direct Current (DC)", "Transformer", "Generator", "Motor", "Electrolysis",
               "Magnetism", "Permeability", "Permittivity", "Resistor", "Capacitor", "Inductor"
             ]
@@ -640,7 +633,8 @@ Structure the article with the following sections, using Markdown headings:
                 chatHistory.push({ role: "user", parts: [{ text: prompt }] });
 
                 const payload = { contents: chatHistory };
-                const apiKey = ""; // Canvas will provide this at runtime
+                // API Key provided by the user
+                const apiKey = "AIzaSyCeFa6fZkBMuSaalq3PP-ZqBEasqO5BFWQ"; // Using the API key provided by the user
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
                 const response = await fetch(apiUrl, {
@@ -651,7 +645,11 @@ Structure the article with the following sections, using Markdown headings:
 
                 const result = await response.json();
 
-                if (result.candidates && result.candidates.length > 0 &&
+                // Specific error handling for "User location is not supported"
+                if (result.error && result.error.code === 400 && result.error.status === "FAILED_PRECONDITION" && result.error.message.includes("User location is not supported")) {
+                    modalArticleContent.innerHTML = "Error: The AI service is not available in your current geographical location. Please try accessing the application from a supported region or use a VPN.";
+                    console.error("API Error: User location not supported.", result.error);
+                } else if (result.candidates && result.candidates.length > 0 &&
                     result.candidates[0].content && result.candidates[0].content.parts &&
                     result.candidates[0].content.parts.length > 0) {
                     let text = result.candidates[0].content.parts[0].text;
@@ -703,11 +701,11 @@ Structure the article with the following sections, using Markdown headings:
                     }
 
                 } else {
-                    modalArticleContent.innerHTML = "Failed to generate article. Please try again.";
-                    console.error("API response structure unexpected:", result);
+                    modalArticleContent.innerHTML = "Failed to generate article. An unexpected error occurred with the AI service. Please try again.";
+                    console.error("API response structure unexpected or generic error:", result);
                 }
             } catch (error) {
-                modalArticleContent.innerHTML = "An error occurred while fetching the article. Please check your network connection.";
+                modalArticleContent.innerHTML = "An error occurred while fetching the article. Please check your network connection or API key.";
                 console.error("Error generating article:", error);
             }
         }
